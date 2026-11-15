@@ -11,13 +11,12 @@
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f8fafc; /* bg-slate-50 */
+      background-color: #f8fafc;
       color: #0f172a;
       -webkit-tap-highlight-color: transparent;
     }
     .font-mono-code { font-family: 'JetBrains Mono', monospace; }
 
-    /* Animaciones de Combate Jaw-Dropping */
     @keyframes pulseGlowRed {
       0%, 100% { box-shadow: 0 0 15px rgba(225, 29, 72, 0.35); }
       50% { box-shadow: 0 0 28px rgba(225, 29, 72, 0.75); }
@@ -53,13 +52,6 @@
     .flash-success { animation: hitFlash 0.6s ease-out; }
     .flash-error { animation: damageFlash 0.6s ease-out; }
 
-    /* Barra de energía diagonal estilo Fighting Game */
-    .vs-bar-container {
-      position: relative;
-      overflow: hidden;
-      border-radius: 9999px;
-      background: #e2e8f0;
-    }
     .vs-bar-fill {
       transition: width 0.65s cubic-bezier(0.22, 1, 0.36, 1);
     }
@@ -84,10 +76,10 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <button type="button" onclick="toggleProjectorModal()" title="Abrir Marcador de Proyección en Aula"
-          class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition">
-          <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          Proyector Aula
+        <button type="button" onclick="toggleProjectorModal()" title="Abrir Marcador en Directo de Aula"
+          class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition">
+          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          <span>Proyector Live</span>
         </button>
         <div class="flex items-center gap-1.5 bg-slate-900 text-white px-3 py-1.5 rounded-lg shadow-inner">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
@@ -96,7 +88,7 @@
       </div>
     </div>
 
-    <!-- ARENA DE COMBATE EN VIVO (Visible durante la batalla) -->
+    <!-- ARENA DE COMBATE EN VIVO -->
     <div id="battleHud" class="hidden bg-slate-900 text-white border-t border-slate-800 px-4 py-2.5">
       <div class="max-w-3xl mx-auto">
         <div class="flex items-center justify-between text-[11px] font-extrabold uppercase tracking-wider mb-1.5">
@@ -116,10 +108,8 @@
           </div>
         </div>
 
-        <!-- Barra de Choque de Fuerzas -->
         <div class="relative h-3.5 w-full bg-indigo-600 rounded-full overflow-hidden border border-slate-700 shadow-inner flex items-center">
           <div id="tugBarAlpha" class="vs-bar-fill h-full bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500" style="width: 50%;"></div>
-          <!-- Núcleo de choque central -->
           <div id="clashSparkIcon" class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white text-slate-900 font-black text-[9px] flex items-center justify-center shadow-md border-2 border-slate-900 transition-all duration-500" style="left: 50%;">
             VS
           </div>
@@ -131,9 +121,8 @@
   <!-- CONTENEDOR PRINCIPAL -->
   <main class="flex-grow max-w-3xl w-full mx-auto px-4 py-6">
 
-    <!-- PANTALLA 1: REGISTRO Y SELECCIÓN DE FACCION EN EL COMBATE -->
+    <!-- PANTALLA 1: REGISTRO Y SELECCIÓN DE FACCION -->
     <section id="registrationScreen" class="space-y-5">
-      <!-- Banner Visual de Enfrentamiento -->
       <div class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm overflow-hidden relative">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-100 pb-5">
           <div class="flex-1 text-center sm:text-left">
@@ -162,7 +151,6 @@
       <form id="regForm" class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4" novalidate>
         <div class="flex items-center justify-between">
           <h3 class="text-base font-extrabold text-slate-900">Acreditación de Combatiente · 2º ADE</h3>
-          <button type="button" onclick="toggleProjectorModal()" class="sm:hidden text-xs font-bold text-indigo-600 underline">Proyector Aula</button>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -196,7 +184,6 @@
           </div>
         </div>
 
-        <!-- Selector de Facción (Mitad de la clase vs Mitad de la clase) -->
         <div class="pt-1">
           <label class="block text-xs font-bold text-slate-700 mb-2">Selecciona tu Facción en el Combate de Clase *</label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -242,13 +229,8 @@
 
     <!-- PANTALLA 2: ARENA DE COMBATE (5 ASALTOS) -->
     <section id="arenaScreen" class="hidden space-y-5">
-      <!-- Indicador de progreso de asaltos -->
       <div class="grid grid-cols-5 gap-2" id="roundPills"></div>
-
-      <!-- Tarjeta Dinámica del Asalto Actual -->
-      <div id="roundContainer" class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-6 transition-all">
-        <!-- Se inyecta vía JS -->
-      </div>
+      <div id="roundContainer" class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-6 transition-all"></div>
     </section>
 
     <!-- PANTALLA 3: RESULTADOS FINALES, VEREDICTO Y ENVÍO -->
@@ -258,7 +240,6 @@
         <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Combate Cultural Completado</h2>
         <p id="finalStudentMeta" class="text-xs sm:text-sm text-slate-600 font-medium"></p>
 
-        <!-- Marcador Visual de Impacto de Combate -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
           <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
             <div class="text-[11px] font-bold uppercase text-slate-400">Calificación IEB</div>
@@ -282,7 +263,6 @@
           </div>
         </div>
 
-        <!-- Token de Batalla para Proyector en Vivo -->
         <div class="bg-slate-900 text-white rounded-xl p-4 text-left space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">ID de Sesión & Token de Combate</span>
@@ -294,7 +274,6 @@
           <p class="text-[11px] text-slate-400">Registra tu resultado oficial en Google Sheets y descarga tu justificante CSV antes de cerrar.</p>
         </div>
 
-        <!-- Botones de Envío y Respaldo CSV -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
           <button type="button" id="btnSubmitSheets" onclick="submitToGoogleSheets()"
             class="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-extrabold text-sm shadow-sm transition flex items-center justify-center gap-2">
@@ -312,7 +291,6 @@
         <div id="submitStatusMsg" class="hidden p-3 rounded-xl text-xs font-bold"></div>
       </div>
 
-      <!-- Desglose Técnico de Respuestas -->
       <div class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-3">
         <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-500">Auditoría de Primeros Intentos (Q1 - Q10)</h3>
         <div id="auditList" class="divide-y divide-slate-100 text-xs"></div>
@@ -321,87 +299,84 @@
 
   </main>
 
-  <!-- MODAL PROYECTOR DE AULA: VISUALIZADOR DE COMBATE EN DIRECTO -->
-  <div id="projectorModal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+  <!-- MODAL PROYECTOR DE AULA: SINCRONIZACIÓN AUTOMÁTICA EN TIEMPO REAL (POLLING 5s) -->
+  <div id="projectorModal" class="hidden fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-slate-900 border border-slate-700 text-white rounded-3xl max-w-4xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-auto">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
         <div>
-          <span class="text-xs font-bold uppercase tracking-widest text-amber-400">IEB · Marcador de Proyección en Aula</span>
-          <h2 class="text-xl sm:text-2xl font-black tracking-tight mt-0.5">COMBATE CULTURAL EN DIRECTO: NETFLIX VS. TOYOTA</h2>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-widest text-amber-400">IEB · Marcador Oficial en Tiempo Real</span>
+            <span id="liveSyncBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-emerald-950 text-emerald-300 border border-emerald-700/70">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              LIVE SYNC (5s)
+            </span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black tracking-tight mt-1">COMBATE CULTURAL: NETFLIX VS. TOYOTA</h2>
         </div>
-        <button type="button" onclick="toggleProjectorModal()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="fetchLiveStandings(true)" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-emerald-400 border border-slate-700 transition">
+            ↻ Sincronizar Ahora
+          </button>
+          <button type="button" onclick="toggleProjectorModal()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
       </div>
 
-      <!-- Arena Visual Grande para Proyector -->
       <div class="grid grid-cols-1 md:grid-cols-11 gap-4 items-center">
-        <!-- Luchador 1: Netflix -->
         <div class="md:col-span-5 bg-gradient-to-br from-rose-950/90 to-slate-900 border-2 border-rose-500/60 rounded-2xl p-5 glow-netflix">
           <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-black uppercase tracking-wider text-rose-400">Facción Alpha</span>
-            <span id="projNetflixCount" class="text-xs font-mono-code bg-rose-900/80 px-2 py-0.5 rounded text-rose-200">0 alumnos</span>
+            <span id="projNetflixCount" class="text-xs font-mono-code bg-rose-900/80 px-2.5 py-0.5 rounded text-rose-200 font-bold">0 combatientes</span>
           </div>
-          <h3 class="text-2xl font-black text-white">NETFLIX</h3>
+          <h3 class="text-2xl sm:text-3xl font-black text-white">NETFLIX</h3>
           <p class="text-xs text-rose-200/80 mt-1">Libertad, Densidad de Talento y Franqueza Radical</p>
           <div class="mt-4 pt-3 border-t border-rose-800/50 flex items-baseline justify-between">
             <span class="text-xs text-rose-300">Precisión Media 1er Intento:</span>
-            <span id="projNetflixAvg" class="text-3xl font-black font-mono-code text-rose-400">0.0%</span>
+            <span id="projNetflixAvg" class="text-3xl sm:text-4xl font-black font-mono-code text-rose-400">0.0%</span>
           </div>
         </div>
 
-        <!-- Centro VS -->
         <div class="md:col-span-1 flex justify-center">
           <div class="w-14 h-14 rounded-2xl bg-amber-400 text-slate-950 font-black text-lg flex items-center justify-center shadow-lg clash-badge">
             VS
           </div>
         </div>
 
-        <!-- Luchador 2: Toyota -->
         <div class="md:col-span-5 bg-gradient-to-bl from-indigo-950/90 to-slate-900 border-2 border-indigo-500/60 rounded-2xl p-5 glow-toyota">
           <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-black uppercase tracking-wider text-indigo-400">Facción Omega</span>
-            <span id="projToyotaCount" class="text-xs font-mono-code bg-indigo-900/80 px-2 py-0.5 rounded text-indigo-200">0 alumnos</span>
+            <span id="projToyotaCount" class="text-xs font-mono-code bg-indigo-900/80 px-2.5 py-0.5 rounded text-indigo-200 font-bold">0 combatientes</span>
           </div>
-          <h3 class="text-2xl font-black text-white">TOYOTA</h3>
+          <h3 class="text-2xl sm:text-3xl font-black text-white">TOYOTA</h3>
           <p class="text-xs text-indigo-200/80 mt-1">Teoría Z, Consenso Nemawashi y Estabilidad</p>
           <div class="mt-4 pt-3 border-t border-indigo-800/50 flex items-baseline justify-between">
             <span class="text-xs text-indigo-300">Precisión Media 1er Intento:</span>
-            <span id="projToyotaAvg" class="text-3xl font-black font-mono-code text-indigo-400">0.0%</span>
+            <span id="projToyotaAvg" class="text-3xl sm:text-4xl font-black font-mono-code text-indigo-400">0.0%</span>
           </div>
         </div>
       </div>
 
-      <!-- Barra de Dominio de Clase -->
-      <div class="space-y-2">
-        <div class="flex justify-between text-xs font-extrabold uppercase tracking-wider">
+      <div class="space-y-2.5 bg-slate-950/60 p-4 rounded-2xl border border-slate-800">
+        <div class="flex justify-between text-xs sm:text-sm font-extrabold uppercase tracking-wider">
           <span class="text-rose-400">Dominio Netflix: <span id="projAlphaShare">50%</span></span>
-          <span id="projWinnerBanner" class="text-amber-400">ESPERANDO DATOS DE COMBATE</span>
+          <span id="projWinnerBanner" class="text-amber-400 text-center">CONECTANDO CON GOOGLE SHEETS...</span>
           <span class="text-indigo-400">Dominio Toyota: <span id="projOmegaShare">50%</span></span>
         </div>
-        <div class="relative h-6 w-full bg-indigo-600 rounded-full overflow-hidden border-2 border-slate-700">
+        <div class="relative h-7 w-full bg-indigo-600 rounded-full overflow-hidden border-2 border-slate-700 shadow-inner">
           <div id="projTugBar" class="vs-bar-fill h-full bg-gradient-to-r from-rose-600 via-rose-500 to-amber-400" style="width: 50%;"></div>
         </div>
-      </div>
-
-      <!-- Consola del Docente para Consolidar Resultados en Tiempo Real -->
-      <div class="bg-slate-800/70 border border-slate-700 rounded-2xl p-4 space-y-3">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div>
-            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Consolidación Rápida en Directo (Docente)</h4>
-            <p class="text-[11px] text-slate-400">Pega aquí filas copiadas desde Google Sheets o Tokens de Batalla de los alumnos (uno por línea) para actualizar el combate en vivo.</p>
+        <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 pt-1">
+          <span id="lastSyncInfo">Última lectura: esperando primera respuesta...</span>
+          <div class="flex items-center gap-3">
+            <label class="inline-flex items-center gap-1.5 cursor-pointer text-slate-300">
+              <input type="checkbox" id="filterTodayOnly" checked onchange="fetchLiveStandings(true)" class="rounded bg-slate-800 border-slate-600 text-amber-400 focus:ring-0" />
+              <span>Solo sesión de hoy</span>
+            </label>
+            <button type="button" onclick="loadDemoBattle()" class="text-amber-400 hover:underline font-semibold">
+              Simular Demo
+            </button>
           </div>
-          <button type="button" onclick="loadDemoBattle()" class="shrink-0 text-[11px] font-bold px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-amber-300 transition">
-            Simular Combate Demo
-          </button>
-        </div>
-        <textarea id="bulkPasteArea" rows="3" placeholder="Pega aquí filas de Google Sheets (que incluyan NETFLIX o TOYOTA y la nota/aciertos) o tokens IEB-T6-..."
-          class="w-full rounded-xl bg-slate-950 border border-slate-700 p-3 text-xs font-mono-code text-slate-200 focus:outline-none focus:border-amber-400"></textarea>
-        <div class="flex justify-end gap-2">
-          <button type="button" onclick="clearProjectorData()" class="px-3.5 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-xs font-bold text-slate-200">Limpiar</button>
-          <button type="button" onclick="computeProjectorStandings()" class="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black uppercase tracking-wider">
-            Actualizar Marcador en Vivo
-          </button>
         </div>
       </div>
     </div>
@@ -414,27 +389,23 @@
 
   <script>
     // =========================================================================
-    // CONFIGURACIÓN Y ENDPOINT DE GOOGLE APPS SCRIPT
+    // PEGA AQUÍ DENTRO DE LAS COMILLAS LA URL /exec DE TU NUEVO GOOGLE SHEETS
     // =========================================================================
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVaIkBwaWCCvHkh57BJg59elYPY7nBTeV2VFhOxHznNc_u0EuZ-6l4szPuuhpabYM/exec";
 
-    // =========================================================================
-    // ESTADO GLOBAL DE LA SESIÓN
-    // =========================================================================
     const state = {
       sessionId: "",
       nombre: "",
       apellidos: "",
       grupo: "",
       email: "",
-      faction: "", // 'NETFLIX' | 'TOYOTA'
+      faction: "",
       startTime: null,
       elapsedSeconds: 0,
       timerInterval: null,
-      currentRound: 0, // 0..4
+      currentRound: 0,
       combo: 0,
       powerPoints: 0,
-      // Registro estricto del primer intento (q1..q10): true = acierto a la primera, false = fallo en primer intento, null = pendiente
       firstAttemptResults: Array(10).fill(null),
       firstAttemptDetails: Array(10).fill(""),
       totalErrors: 0,
@@ -443,12 +414,10 @@
         mcqDone: false
       },
       isSubmitting: false,
-      submitted: false
+      submitted: false,
+      livePollInterval: null
     };
 
-    // =========================================================================
-    // UTILIDAD OBLIGATORIA: SHUFFLE ARRAY (Fisher-Yates)
-    // =========================================================================
     function shuffleArray(array) {
       const arr = [...array];
       for (let i = arr.length - 1; i > 0; i--) {
@@ -458,15 +427,11 @@
       return arr;
     }
 
-    // =========================================================================
-    // BANCO DE CONTENIDOS ACADÉMICOS POR FACCIÓN (RIGOR UNIVERSITARIO IEB)
-    // =========================================================================
     const BATTLE_DATA = {
       NETFLIX: {
         label: "Facción Alpha · Netflix Culture Deck",
         themeColor: "rose",
         rounds: [
-          // ASALTO 1: EDGAR SCHEIN (Artefactos, Valores Declarados y Supuestos Básicos)
           {
             title: "Asalto 1 · Anatomía Cultural de Schein en Netflix",
             context: "Edgar Schein descompone la cultura organizacional en tres niveles de visibilidad (artefactos, valores declarados y supuestos tácitos). Netflix eliminó las políticas formales de vacaciones y gastos sustituyéndolas por la regla 'Actúa en el mejor interés de Netflix'.",
@@ -504,7 +469,6 @@
               ]
             }
           },
-          // ASALTO 2: MCGREGOR (TEORÍA X/Y) Y OUCHI (TEORÍA Z)
           {
             title: "Asalto 2 · Naturaleza Humana: Teoría Y Radical frente a Teoría Z",
             context: "Douglas McGregor contrapuso la Teoría X (desconfianza y control jerárquico) frente a la Teoría Y (autodirección y motivación intrínseca), mientras William Ouchi formuló la Teoría Z basada en lealtad a largo plazo.",
@@ -542,7 +506,6 @@
               ]
             }
           },
-          // ASALTO 3: HARTMUT ROSA (ACELERACIÓN SOCIAL Y RESONANCIA)
           {
             title: "Asalto 3 · Aceleración Social y Riesgo de Burnout (Hartmut Rosa)",
             context: "Hartmut Rosa analiza la modernidad tardía a través de tres dimensiones de aceleración (tecnológica, del cambio social y del ritmo de vida) y advierte sobre la alienación frente a los espacios de resonancia.",
@@ -579,7 +542,6 @@
               ]
             }
           },
-          // ASALTO 4: MATRIZ DE ACTITUDES Y MENDELOW (STAKEHOLDERS Y CULTURA)
           {
             title: "Asalto 4 · Diagnóstico de Actitudes y Gestión de Stakeholders",
             context: "En el Tema 6 se estudian la Matriz de Actitudes (adecuación axiológica vs. valoración de oportunidades) y la Matriz de Mendelow (poder vs. interés de los stakeholders).",
@@ -627,7 +589,6 @@
               ]
             }
           },
-          // ASALTO 5: RSC, TRIPLE BOTTOM LINE (ELKINGTON) Y DOBLE MATERIALIDAD ESG
           {
             title: "Asalto 5 · Gobernanza, Triple Bottom Line y Doble Materialidad",
             context: "John Elkington propuso el Triple Bottom Line (Profit, People, Planet) frente a la tesis de Milton Friedman, evolucionando hacia los criterios ESG y la Doble Materialidad europea.",
@@ -668,14 +629,10 @@
         ]
       },
 
-      // =======================================================================
-      // FACCIÓN OMEGA: THE TOYOTA WAY (TEORÍA Z, CONSENSO Y CULTURA DE CLAN)
-      // =======================================================================
       TOYOTA: {
         label: "Facción Omega · The Toyota Way (Teoría Z)",
         themeColor: "indigo",
         rounds: [
-          // ASALTO 1: EDGAR SCHEIN EN TOYOTA
           {
             title: "Asalto 1 · Anatomía Cultural de Schein en Toyota",
             context: "En contraposición a Netflix, The Toyota Way articula una cultura de cohesión profunda donde la estabilidad del empleo, la observación directa (Genchi Genbutsu) y la mejora continua (Kaizen) estructuran la organización.",
@@ -713,7 +670,6 @@
               ]
             }
           },
-          // ASALTO 2: TEORÍA Z DE WILLIAM OUCHI VS. NETFLIX
           {
             title: "Asalto 2 · La Teoría Z de Ouchi frente al Individualismo de Silicon Valley",
             context: "William Ouchi formuló en los años 80 la Teoría Z integrando prácticas japonesas y estadounidenses: empleo a largo plazo, toma de decisiones consensuada y responsabilidad individual combinada con cohesión grupal.",
@@ -751,7 +707,6 @@
               ]
             }
           },
-          // ASALTO 3: HARTMUT ROSA (RESONANCIA VS ACELERACIÓN ALIENANTE)
           {
             title: "Asalto 3 · Estabilidad, Resonancia y Aceleración Social (Hartmut Rosa)",
             context: "Frente a la vorágine de la aceleración social descrita por Hartmut Rosa, el modelo Toyota busca estabilizar los procesos y construir vínculos duraderos con empleados y proveedores.",
@@ -788,7 +743,6 @@
               ]
             }
           },
-          // ASALTO 4: MATRIZ DE ACTITUDES Y MENDELOW EN TOYOTA
           {
             title: "Asalto 4 · Perfiles Actitudinales y Red de Stakeholders en Toyota",
             context: "Analizamos cómo la cultura Toyota configura la adecuación axiológica de su plantilla y gestiona su red de grupos de interés mediante las matrices del Tema 6.",
@@ -808,7 +762,7 @@
                   correct: "Vocacional (Alta adecuación / Baja oportunidad)"
                 },
                 {
-                  prompt: "Proveedores de primer nivel (Keiretsu) integrados en el sistema Just-in-Time con alta interdependencia",
+                  prompt: "Proveedores de primer nivel integrados en el sistema Just-in-Time con alta interdependencia",
                   options: ["Key Players / Promoters (Alto Poder / Alto Interés)", "Minimal Effort / Apathetics (Bajo Poder / Bajo Interés)", "Keep Satisfied / Latents (Alto Poder / Bajo Interés)", "Keep Informed / Defenders (Bajo Poder / Alto Interés)"],
                   correct: "Key Players / Promoters (Alto Poder / Alto Interés)"
                 }
@@ -836,7 +790,6 @@
               ]
             }
           },
-          // ASALTO 5: RSC, TRIPLE BOTTOM LINE Y DOBLE MATERIALIDAD EN TOYOTA
           {
             title: "Asalto 5 · Sostenibilidad, Caníbales con Tenedores y Doble Materialidad",
             context: "John Elkington acuñó el 'Triple Bottom Line' (Profit, People, Planet) y la directiva europea consolidó la Doble Materialidad para evaluar tanto el riesgo financiero como el impacto socioambiental.",
@@ -878,9 +831,6 @@
       }
     };
 
-    // =========================================================================
-    // REGISTRO Y VALIDACIÓN DE ALUMNO IEB
-    // =========================================================================
     document.getElementById("regForm").addEventListener("submit", function (e) {
       e.preventDefault();
       const nombre = document.getElementById("inputNombre").value.trim();
@@ -912,7 +862,6 @@
       state.sessionId = `IEB-T6-${state.faction}-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
       state.startTime = Date.now();
 
-      // Configurar cabecera y HUD
       const badge = document.getElementById("factionBadgeHeader");
       badge.classList.remove("hidden");
       if (state.faction === "NETFLIX") {
@@ -945,20 +894,16 @@
       return `${m}:${s}`;
     }
 
-    // =========================================================================
-    // ACTUALIZACIÓN DINÁMICA DEL HUD DE COMBATE (VISUAL JAW-DROPPING)
-    // =========================================================================
     function updateBattleHud() {
       document.getElementById("roundCounter").textContent = state.currentRound + 1;
       const comboBadge = document.getElementById("comboBadge");
       if (state.combo >= 2) {
-        comboBadge.textContent = `COMBO x${state.combo} 🔥`;
+        comboBadge.textContent = `COMBO x${state.combo}`;
         comboBadge.classList.remove("hidden");
       } else {
         comboBadge.classList.add("hidden");
       }
 
-      // Calcular ventaja visual en la barra de combate según aciertos/fallos del jugador
       const hits = state.firstAttemptResults.filter(r => r === true).length;
       const misses = state.firstAttemptResults.filter(r => r === false).length;
       const swing = (hits * 4.2) - (misses * 3.5);
@@ -977,9 +922,6 @@
       document.getElementById("clashSparkIcon").style.left = `${alphaPct}%`;
     }
 
-    // =========================================================================
-    // RENDERIZADO DE ASALTOS (5 SALAS / MISIONES)
-    // =========================================================================
     function renderRoundPills() {
       const container = document.getElementById("roundPills");
       container.innerHTML = "";
@@ -1022,7 +964,6 @@
           <p class="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed ${accentBorder} border p-3 rounded-xl">${round.context}</p>
         </div>
 
-        <!-- PARTE A: RETO INTERACTIVO -->
         <div id="interactiveBlock" class="space-y-3">
           <div class="flex items-center justify-between">
             <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-slate-800">
@@ -1042,7 +983,6 @@
 
         <hr class="border-slate-200" />
 
-        <!-- PARTE B: DILEMA CONCEPTUAL TIPO TEST -->
         <div id="mcqBlock" class="space-y-3">
           <div class="flex items-center justify-between">
             <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-slate-800">
@@ -1060,7 +1000,6 @@
           </button>
         </div>
 
-        <!-- BOTÓN DESBLOQUEO DE ASALTO -->
         <div class="pt-3 border-t border-slate-100 flex justify-end">
           <button type="button" id="btnNextRound" disabled onclick="advanceRound()"
             class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-extrabold text-sm tracking-wide shadow-sm transition flex items-center justify-center gap-2">
@@ -1075,9 +1014,6 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    // =========================================================================
-    // CONSTRUCCIÓN DE WIDGETS INTERACTIVOS ALEATORIZADOS
-    // =========================================================================
     let currentOrderState = [];
 
     function buildInteractiveWidget(inter) {
@@ -1111,17 +1047,15 @@
           box.appendChild(label);
         });
       } else if (inter.type === "order") {
-        // Barajar pasos hasta garantizar que no coincidan exactamente con el orden correcto
         let shuffled = shuffleArray(inter.steps);
         while (shuffled.every((val, idx) => val === inter.steps[idx])) {
           shuffled = shuffleArray(inter.steps);
         }
-        // Limpiar prefijos numéricos visibles para que el alumno razone el orden sin pistas
         currentOrderState = shuffled.map(s => s.replace(/^\d+\.\s*/, ""));
         renderOrderList();
       } else if (inter.type === "match") {
         const shuffledPairs = shuffleArray(inter.pairs);
-        shuffledPairs.forEach((pair, idx) => {
+        shuffledPairs.forEach((pair) => {
           const shuffledChoices = shuffleArray(pair.options);
           const card = document.createElement("div");
           card.className = "p-3 rounded-xl border border-slate-200 bg-slate-50/70 space-y-2";
@@ -1183,7 +1117,7 @@
         const label = document.createElement("label");
         label.className = "flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 cursor-pointer transition";
         label.innerHTML = `
-          <input type="radio" name="mcqCurrent" value="${opt.isCorrect ? "1" : "0"}" data-opt-text="${opt.text.substring(0, 45)}..."
+          <input type="radio" name="mcqCurrent" value="${opt.isCorrect ? "1" : "0"}"
             class="mt-1 w-4 h-4 text-slate-900 border-slate-300 focus:ring-slate-900" />
           <div class="text-xs text-slate-800 leading-relaxed">
             <span class="font-black text-slate-900 mr-1">${letters[i]}.</span>${opt.text}
@@ -1193,9 +1127,6 @@
       });
     }
 
-    // =========================================================================
-    // VALIDACIÓN Y REGISTRO ESTRICTO AL PRIMER INTENTO
-    // =========================================================================
     function verifyInteractive() {
       if (state.roundUnlocked.interactiveDone) return;
       const round = BATTLE_DATA[state.faction].rounds[state.currentRound];
@@ -1243,7 +1174,6 @@
         return;
       }
 
-      // Registrar primer intento si aún es null
       if (state.firstAttemptResults[qIdx] === null) {
         state.firstAttemptResults[qIdx] = isCorrect;
         state.firstAttemptDetails[qIdx] = isCorrect ? "Acierto 1er intento" : "Fallo 1er intento";
@@ -1289,7 +1219,6 @@
 
       const isCorrect = selected.value === "1";
 
-      // Registrar primer intento si aún es null
       if (state.firstAttemptResults[qIdx] === null) {
         state.firstAttemptResults[qIdx] = isCorrect;
         state.firstAttemptDetails[qIdx] = isCorrect ? "Acierto 1er intento" : "Fallo 1er intento";
@@ -1322,7 +1251,7 @@
     function triggerVisualHit(success) {
       const card = document.getElementById("roundContainer");
       card.classList.remove("shake-card", "flash-success", "flash-error");
-      void card.offsetWidth; // Reflow para reiniciar animación
+      void card.offsetWidth;
       if (success) {
         card.classList.add("flash-success");
       } else {
@@ -1344,12 +1273,8 @@
       }
     }
 
-    // =========================================================================
-    // FINALIZACIÓN, CÁLCULO DE NOTA Y ENVÍO A GOOGLE SHEETS / CSV
-    // =========================================================================
     function calculateFinalScore() {
       const hits = state.firstAttemptResults.filter(r => r === true).length;
-      // Cada uno de los 10 ítems vale 1.00 punto al primer intento (0 a 10)
       return {
         hits,
         grade: Number(hits.toFixed(2))
@@ -1380,11 +1305,9 @@
       document.getElementById("resTime").textContent = formatTime(state.elapsedSeconds);
       document.getElementById("resPower").textContent = `${state.powerPoints} pts`;
 
-      // Token compacto para proyectar/pegar en el marcador de aula
       const battleToken = `${state.sessionId}|${state.faction}|${grade.toFixed(2)}|${hits}/10|${state.nombre} ${state.apellidos}`;
       document.getElementById("sessionIdBox").textContent = battleToken;
 
-      // Renderizar auditoría de Q1..Q10
       const auditList = document.getElementById("auditList");
       auditList.innerHTML = "";
       state.firstAttemptResults.forEach((res, idx) => {
@@ -1397,15 +1320,6 @@
           </span>
         `;
         auditList.appendChild(row);
-      });
-
-      // Guardar localmente para el proyector de aula en el mismo dispositivo
-      saveLocalBattleRecord({
-        sessionId: state.sessionId,
-        faction: state.faction,
-        grade: grade,
-        hits: hits,
-        student: `${state.nombre} ${state.apellidos}`
       });
     }
 
@@ -1445,7 +1359,6 @@
       params.append("aciertosPrimerIntento", String(hits));
       params.append("poderCombate", String(state.powerPoints));
 
-      // Alias múltiples requeridos para la nota
       const gradeStr = grade.toFixed(2);
       params.append("nota", gradeStr);
       params.append("notaFinal", gradeStr);
@@ -1453,7 +1366,6 @@
       params.append("calificacion", gradeStr);
       params.append("grade", gradeStr);
 
-      // Desglose q1 a q10
       state.firstAttemptResults.forEach((val, idx) => {
         params.append(`q${idx + 1}`, val ? "1" : "0");
       });
@@ -1477,7 +1389,6 @@
         statusMsg.classList.remove("hidden");
       })
       .catch(() => {
-        // Reabrir candado solo si falló la red
         state.isSubmitting = false;
         btn.disabled = false;
         btn.style.pointerEvents = "auto";
@@ -1524,104 +1435,85 @@
       URL.revokeObjectURL(url);
     }
 
-    // =========================================================================
-    // MODO PROYECTOR EN AULA: CONSOLIDACIÓN Y VISUALIZACIÓN DE COMBATE EN VIVO
-    // =========================================================================
     function toggleProjectorModal() {
       const modal = document.getElementById("projectorModal");
       modal.classList.toggle("hidden");
       if (!modal.classList.contains("hidden")) {
-        refreshProjectorFromLocal();
+        fetchLiveStandings(true);
+        if (!state.livePollInterval) {
+          state.livePollInterval = setInterval(() => fetchLiveStandings(false), 5000);
+        }
+      } else {
+        if (state.livePollInterval) {
+          clearInterval(state.livePollInterval);
+          state.livePollInterval = null;
+        }
       }
     }
 
-    function saveLocalBattleRecord(record) {
+    async function fetchLiveStandings(manual = false) {
+      const infoLabel = document.getElementById("lastSyncInfo");
+      const syncBadge = document.getElementById("liveSyncBadge");
+      if (manual) {
+        infoLabel.textContent = "Consultando Google Sheets en directo...";
+      }
+
       try {
-        const existing = JSON.parse(localStorage.getItem("ieb_t6_battle_records") || "[]");
-        if (!existing.some(r => r.sessionId === record.sessionId)) {
-          existing.push(record);
-          localStorage.setItem("ieb_t6_battle_records", JSON.stringify(existing));
-        }
-      } catch (e) {}
-    }
+        const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getScores&t=${Date.now()}`, {
+          method: "GET",
+          redirect: "follow"
+        });
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        const payload = await response.json();
 
-    function refreshProjectorFromLocal() {
-      try {
-        const existing = JSON.parse(localStorage.getItem("ieb_t6_battle_records") || "[]");
-        if (existing.length > 0) {
-          renderProjectorStats(existing);
-        }
-      } catch (e) {}
-    }
-
-    function computeProjectorStandings() {
-      const raw = document.getElementById("bulkPasteArea").value.trim();
-      const lines = raw.split(/\r?\n/).filter(l => l.trim().length > 0);
-      const parsed = [];
-
-      lines.forEach((line, idx) => {
-        const upper = line.toUpperCase();
-        let faction = null;
-        if (upper.includes("NETFLIX")) faction = "NETFLIX";
-        else if (upper.includes("TOYOTA")) faction = "TOYOTA";
-        if (!faction) return;
-
-        // Extraer puntuación (busca formato X/10 o número decimal 0..10)
-        let grade = 0;
-        const ratioMatch = line.match(/(\d+(?:\.\d+)?)\s*\/\s*10/);
-        if (ratioMatch) {
-          grade = parseFloat(ratioMatch[1]);
-        } else {
-          // Buscar columnas separadas por tabulador o coma (Google Sheets copy-paste)
-          const cols = line.split(/\t|,|;/).map(c => c.replace(/"/g, "").trim());
-          const numCandidates = cols
-            .map(c => parseFloat(c.replace(",", ".")))
-            .filter(n => !isNaN(n) && n >= 0 && n <= 10);
-          if (numCandidates.length > 0) {
-            grade = numCandidates[0];
+        if (payload && Array.isArray(payload.records)) {
+          let records = payload.records;
+          const todayOnly = document.getElementById("filterTodayOnly").checked;
+          if (todayOnly) {
+            const todayPrefix = new Date().toISOString().slice(0, 10);
+            records = records.filter(r => !r.fecha || String(r.fecha).startsWith(todayPrefix));
           }
-        }
-        parsed.push({ sessionId: `PASTE-${idx}`, faction, grade });
-      });
 
-      if (parsed.length === 0) {
-        alert("No se detectaron filas válidas con 'NETFLIX' o 'TOYOTA' y una puntuación de 0 a 10.");
-        return;
+          renderProjectorStats(records);
+          const nowStr = new Date().toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+          infoLabel.textContent = `Sincronizado en vivo (${nowStr}) · ${records.length} actas recibidas`;
+          syncBadge.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-emerald-950 text-emerald-300 border border-emerald-700/70";
+        }
+      } catch (err) {
+        infoLabel.textContent = "Esperando activación de doGet(e) en Apps Script o primera lectura...";
+        syncBadge.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-amber-950 text-amber-300 border border-amber-700/70";
       }
-      renderProjectorStats(parsed);
     }
 
     function loadDemoBattle() {
-      const demoLines = [
-        "IEB-T6-NETFLIX-01|NETFLIX|8.00|8/10|Alumno Demo 1",
-        "IEB-T6-NETFLIX-02|NETFLIX|9.00|9/10|Alumno Demo 2",
-        "IEB-T6-NETFLIX-03|NETFLIX|7.00|7/10|Alumno Demo 3",
-        "IEB-T6-TOYOTA-01|TOYOTA|9.00|9/10|Alumno Demo 4",
-        "IEB-T6-TOYOTA-02|TOYOTA|10.00|10/10|Alumno Demo 5",
-        "IEB-T6-TOYOTA-03|TOYOTA|8.00|8/10|Alumno Demo 6"
+      if (state.livePollInterval) {
+        clearInterval(state.livePollInterval);
+        state.livePollInterval = null;
+      }
+      const demo = [
+        { faction: "NETFLIX", grade: 8.0 },
+        { faction: "NETFLIX", grade: 9.0 },
+        { faction: "NETFLIX", grade: 7.0 },
+        { faction: "TOYOTA", grade: 9.0 },
+        { faction: "TOYOTA", grade: 10.0 },
+        { faction: "TOYOTA", grade: 8.0 }
       ];
-      document.getElementById("bulkPasteArea").value = demoLines.join("\n");
-      computeProjectorStandings();
-    }
-
-    function clearProjectorData() {
-      document.getElementById("bulkPasteArea").value = "";
-      localStorage.removeItem("ieb_t6_battle_records");
-      renderProjectorStats([]);
+      renderProjectorStats(demo);
+      document.getElementById("lastSyncInfo").textContent = "Modo demostración activo (polling pausado)";
     }
 
     function renderProjectorStats(records) {
-      const netflixRecs = records.filter(r => r.faction === "NETFLIX");
-      const toyotaRecs = records.filter(r => r.faction === "TOYOTA");
+      const netflixRecs = records.filter(r => String(r.faction || r.faccion || "").toUpperCase() === "NETFLIX");
+      const toyotaRecs = records.filter(r => String(r.faction || r.faccion || "").toUpperCase() === "TOYOTA");
 
       const nCount = netflixRecs.length;
       const tCount = toyotaRecs.length;
 
-      const nAvg = nCount > 0 ? (netflixRecs.reduce((acc, r) => acc + r.grade, 0) / nCount) * 10 : 0;
-      const tAvg = tCount > 0 ? (toyotaRecs.reduce((acc, r) => acc + r.grade, 0) / tCount) * 10 : 0;
+      const nAvg = nCount > 0 ? (netflixRecs.reduce((acc, r) => acc + Number(r.grade || r.nota || 0), 0) / nCount) * 10 : 0;
+      const tAvg = tCount > 0 ? (toyotaRecs.reduce((acc, r) => acc + Number(r.grade || r.nota || 0), 0) / tCount) * 10 : 0;
 
-      document.getElementById("projNetflixCount").textContent = `${nCount} alumno${nCount === 1 ? "" : "s"}`;
-      document.getElementById("projToyotaCount").textContent = `${tCount} alumno${tCount === 1 ? "" : "s"}`;
+      document.getElementById("projNetflixCount").textContent = `${nCount} combatiente${nCount === 1 ? "" : "s"}`;
+      document.getElementById("projToyotaCount").textContent = `${tCount} combatiente${tCount === 1 ? "" : "s"}`;
       document.getElementById("projNetflixAvg").textContent = `${nAvg.toFixed(1)}%`;
       document.getElementById("projToyotaAvg").textContent = `${tAvg.toFixed(1)}%`;
 
@@ -1637,17 +1529,17 @@
 
       const winnerBanner = document.getElementById("projWinnerBanner");
       if (nCount === 0 && tCount === 0) {
-        winnerBanner.textContent = "ESPERANDO DATOS DE COMBATE";
-        winnerBanner.className = "text-amber-400";
+        winnerBanner.textContent = "ESPERANDO ACTAS EN DIRECTO...";
+        winnerBanner.className = "text-amber-400 text-center";
       } else if (nAvg > tAvg) {
         winnerBanner.textContent = "🏆 VENTAJA PARA FACCIÓN ALPHA (NETFLIX)";
-        winnerBanner.className = "text-rose-400 animate-pulse";
+        winnerBanner.className = "text-rose-400 animate-pulse text-center";
       } else if (tAvg > nAvg) {
         winnerBanner.textContent = "🏆 VENTAJA PARA FACCIÓN OMEGA (TOYOTA)";
-        winnerBanner.className = "text-indigo-400 animate-pulse";
+        winnerBanner.className = "text-indigo-400 animate-pulse text-center";
       } else {
         winnerBanner.textContent = "⚡ EMPATE TÉCNICO EN LA ARENA";
-        winnerBanner.className = "text-amber-400";
+        winnerBanner.className = "text-amber-400 text-center";
       }
     }
   </script>
