@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>IEB | Tema 6: Choque de Culturas Organizacionales (Netflix vs. Toyota)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc; /* bg-slate-50 */
+      color: #0f172a;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .font-mono-code { font-family: 'JetBrains Mono', monospace; }
+
+    /* Animaciones de Combate Jaw-Dropping */
+    @keyframes pulseGlowRed {
+      0%, 100% { box-shadow: 0 0 15px rgba(225, 29, 72, 0.35); }
+      50% { box-shadow: 0 0 28px rgba(225, 29, 72, 0.75); }
+    }
+    @keyframes pulseGlowIndigo {
+      0%, 100% { box-shadow: 0 0 15px rgba(79, 70, 229, 0.35); }
+      50% { box-shadow: 0 0 28px rgba(79, 70, 229, 0.75); }
+    }
+    @keyframes clashSpark {
+      0% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+      50% { transform: scale(1.25) rotate(8deg); filter: brightness(1.4); }
+      100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+    }
+    @keyframes shakeHard {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-7px) rotate(-1deg); }
+      40% { transform: translateX(7px) rotate(1deg); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+    }
+    @keyframes hitFlash {
+      0% { background-color: rgba(16, 185, 129, 0.25); }
+      100% { background-color: transparent; }
+    }
+    @keyframes damageFlash {
+      0% { background-color: rgba(239, 68, 68, 0.25); }
+      100% { background-color: transparent; }
+    }
+    .glow-netflix { animation: pulseGlowRed 2.5s infinite; }
+    .glow-toyota { animation: pulseGlowIndigo 2.5s infinite; }
+    .clash-badge { animation: clashSpark 1.8s infinite ease-in-out; }
+    .shake-card { animation: shakeHard 0.42s cubic-bezier(.36,.07,.19,.97) both; }
+    .flash-success { animation: hitFlash 0.6s ease-out; }
+    .flash-error { animation: damageFlash 0.6s ease-out; }
+
+    /* Barra de energía diagonal estilo Fighting Game */
+    .vs-bar-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 9999px;
+      background: #e2e8f0;
+    }
+    .vs-bar-fill {
+      transition: width 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col justify-between selection:bg-slate-900 selection:text-white">
+
+  <!-- CABECERA FIJA CON CRONÓMETRO Y ESTADO DE COMBATE -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-3xl mx-auto px-4 py-2.5 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center font-black text-xs tracking-tighter shadow-sm">
+          IEB
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Sociología · Tema 6</span>
+            <span id="factionBadgeHeader" class="hidden text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full"></span>
+          </div>
+          <h1 class="text-sm sm:text-base font-extrabold text-slate-900 leading-tight">Arena Cultural: Netflix vs. Toyota</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="toggleProjectorModal()" title="Abrir Marcador de Proyección en Aula"
+          class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition">
+          <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          Proyector Aula
+        </button>
+        <div class="flex items-center gap-1.5 bg-slate-900 text-white px-3 py-1.5 rounded-lg shadow-inner">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span id="timerDisplay" class="font-mono-code text-xs sm:text-sm font-bold tracking-wider">00:00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARENA DE COMBATE EN VIVO (Visible durante la batalla) -->
+    <div id="battleHud" class="hidden bg-slate-900 text-white border-t border-slate-800 px-4 py-2.5">
+      <div class="max-w-3xl mx-auto">
+        <div class="flex items-center justify-between text-[11px] font-extrabold uppercase tracking-wider mb-1.5">
+          <div class="flex items-center gap-1.5 text-rose-400">
+            <span class="inline-block w-2 h-2 rounded-full bg-rose-500"></span>
+            <span>FACCION ALPHA · NETFLIX</span>
+            <span id="hudAlphaScore" class="font-mono-code bg-rose-950/90 border border-rose-700/60 px-1.5 py-0.5 rounded text-rose-200">50%</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="comboBadge" class="hidden font-mono-code text-[10px] px-2 py-0.5 rounded bg-amber-500/20 border border-amber-400/50 text-amber-300">COMBO x1</span>
+            <span class="font-mono-code text-slate-400">ASALTO <span id="roundCounter" class="text-white">1</span>/5</span>
+          </div>
+          <div class="flex items-center gap-1.5 text-indigo-400">
+            <span id="hudOmegaScore" class="font-mono-code bg-indigo-950/90 border border-indigo-700/60 px-1.5 py-0.5 rounded text-indigo-200">50%</span>
+            <span>FACCION OMEGA · TOYOTA</span>
+            <span class="inline-block w-2 h-2 rounded-full bg-indigo-500"></span>
+          </div>
+        </div>
+
+        <!-- Barra de Choque de Fuerzas -->
+        <div class="relative h-3.5 w-full bg-indigo-600 rounded-full overflow-hidden border border-slate-700 shadow-inner flex items-center">
+          <div id="tugBarAlpha" class="vs-bar-fill h-full bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500" style="width: 50%;"></div>
+          <!-- Núcleo de choque central -->
+          <div id="clashSparkIcon" class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white text-slate-900 font-black text-[9px] flex items-center justify-center shadow-md border-2 border-slate-900 transition-all duration-500" style="left: 50%;">
+            VS
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="flex-grow max-w-3xl w-full mx-auto px-4 py-6">
+
+    <!-- PANTALLA 1: REGISTRO Y SELECCIÓN DE FACCION EN EL COMBATE -->
+    <section id="registrationScreen" class="space-y-5">
+      <!-- Banner Visual de Enfrentamiento -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm overflow-hidden relative">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-100 pb-5">
+          <div class="flex-1 text-center sm:text-left">
+            <span class="inline-block text-[11px] font-bold uppercase tracking-widest text-rose-600 bg-rose-50 border border-rose-200 px-2.5 py-0.5 rounded-full mb-1">Bando 1 · Silicon Valley</span>
+            <h2 class="text-lg sm:text-xl font-black text-slate-900">NETFLIX CULTURE DECK</h2>
+            <p class="text-xs text-slate-600 mt-0.5">Libertad y responsabilidad extrema, equipo deportivo de élite, franqueza radical y cero reglas burocráticas.</p>
+          </div>
+
+          <div class="shrink-0 w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-black text-sm tracking-tighter shadow-lg clash-badge border-2 border-amber-400">
+            VS
+          </div>
+
+          <div class="flex-1 text-center sm:text-right">
+            <span class="inline-block text-[11px] font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-full mb-1">Bando 2 · Teoría Z / Kaizen</span>
+            <h2 class="text-lg sm:text-xl font-black text-slate-900">THE TOYOTA WAY</h2>
+            <p class="text-xs text-slate-600 mt-0.5">Estabilidad a largo plazo, consenso (<em>Nemawashi</em>), socialización profunda y disciplina de procesos.</p>
+          </div>
+        </div>
+
+        <div class="mt-4 bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 text-xs text-slate-700 leading-relaxed">
+          <strong class="text-slate-900">Dinámica de Competición en Directo:</strong> El aula se divide en dos facciones rivales. Selecciona el bando asignado por el profesor. Deberás superar <strong>5 asaltos operativos</strong> (cada uno compuesto por un reto interactivo y un dilema teórico). Tu calificación (0 a 10) y el impacto de tu facción en el combate se calculan <strong>estrictamente sobre tus primeros intentos</strong>.
+        </div>
+      </div>
+
+      <!-- Formulario de Identificación -->
+      <form id="regForm" class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4" novalidate>
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-extrabold text-slate-900">Acreditación de Combatiente · 2º ADE</h3>
+          <button type="button" onclick="toggleProjectorModal()" class="sm:hidden text-xs font-bold text-indigo-600 underline">Proyector Aula</button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label for="inputNombre" class="block text-xs font-bold text-slate-700 mb-1">Nombre *</label>
+            <input type="text" id="inputNombre" required placeholder="Ej. Alejandro"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition" />
+          </div>
+          <div>
+            <label for="inputApellidos" class="block text-xs font-bold text-slate-700 mb-1">Apellidos *</label>
+            <input type="text" id="inputApellidos" required placeholder="Ej. Mendoza Ruiz"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+          <div>
+            <label for="inputGrupo" class="block text-xs font-bold text-slate-700 mb-1">Grupo Académico *</label>
+            <select id="inputGrupo" required
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-slate-900">
+              <option value="">Selecciona...</option>
+              <option value="A">Grupo A</option>
+              <option value="B">Grupo B</option>
+              <option value="C">Grupo C</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <label for="inputEmail" class="block text-xs font-bold text-slate-700 mb-1">Correo Institucional IEB *</label>
+            <input type="email" id="inputEmail" required placeholder="nombre.apellido@alumni-ieb.es"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900" />
+          </div>
+        </div>
+
+        <!-- Selector de Facción (Mitad de la clase vs Mitad de la clase) -->
+        <div class="pt-1">
+          <label class="block text-xs font-bold text-slate-700 mb-2">Selecciona tu Facción en el Combate de Clase *</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="cursor-pointer relative">
+              <input type="radio" name="faction" value="NETFLIX" class="peer sr-only" required />
+              <div class="p-4 rounded-xl border-2 border-slate-200 bg-white peer-checked:border-rose-600 peer-checked:bg-rose-50/60 transition hover:border-rose-300">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs font-black uppercase tracking-wider text-rose-700">Facción Alpha</span>
+                  <span class="w-4 h-4 rounded-full border-2 border-slate-300 peer-checked:border-rose-600 flex items-center justify-center">
+                    <span class="w-2 h-2 rounded-full bg-rose-600 opacity-0 peer-checked:opacity-100"></span>
+                  </span>
+                </div>
+                <div class="font-extrabold text-slate-900 text-sm">Netflix Culture Deck</div>
+                <p class="text-[11px] text-slate-600 mt-1">Defensa y análisis crítico del modelo de libertad radical y densidad de talento.</p>
+              </div>
+            </label>
+
+            <label class="cursor-pointer relative">
+              <input type="radio" name="faction" value="TOYOTA" class="peer sr-only" required />
+              <div class="p-4 rounded-xl border-2 border-slate-200 bg-white peer-checked:border-indigo-600 peer-checked:bg-indigo-50/60 transition hover:border-indigo-300">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs font-black uppercase tracking-wider text-indigo-700">Facción Omega</span>
+                  <span class="w-4 h-4 rounded-full border-2 border-slate-300 peer-checked:border-indigo-600 flex items-center justify-center">
+                    <span class="w-2 h-2 rounded-full bg-indigo-600 opacity-0 peer-checked:opacity-100"></span>
+                  </span>
+                </div>
+                <div class="font-extrabold text-slate-900 text-sm">The Toyota Way (Teoría Z)</div>
+                <p class="text-[11px] text-slate-600 mt-1">Defensa y análisis crítico del modelo de cohesión comunitaria y mejora continua.</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div id="regError" class="hidden p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold"></div>
+
+        <button type="submit"
+          class="w-full py-3.5 px-5 rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white font-extrabold text-sm tracking-wide shadow-md transition flex items-center justify-center gap-2">
+          <span>ENTRAR EN LA ARENA DE COMBATE</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </button>
+      </form>
+    </section>
+
+    <!-- PANTALLA 2: ARENA DE COMBATE (5 ASALTOS) -->
+    <section id="arenaScreen" class="hidden space-y-5">
+      <!-- Indicador de progreso de asaltos -->
+      <div class="grid grid-cols-5 gap-2" id="roundPills"></div>
+
+      <!-- Tarjeta Dinámica del Asalto Actual -->
+      <div id="roundContainer" class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-6 transition-all">
+        <!-- Se inyecta vía JS -->
+      </div>
+    </section>
+
+    <!-- PANTALLA 3: RESULTADOS FINALES, VEREDICTO Y ENVÍO -->
+    <section id="resultsScreen" class="hidden space-y-5">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm text-center space-y-4">
+        <div id="finalFactionBanner" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider"></div>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Combate Cultural Completado</h2>
+        <p id="finalStudentMeta" class="text-xs sm:text-sm text-slate-600 font-medium"></p>
+
+        <!-- Marcador Visual de Impacto de Combate -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-[11px] font-bold uppercase text-slate-400">Calificación IEB</div>
+            <div id="resGrade" class="text-2xl font-black text-slate-900 mt-0.5">0.00</div>
+            <div class="text-[10px] text-slate-500">sobre 10.00 (1er intento)</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-[11px] font-bold uppercase text-slate-400">Aciertos Directos</div>
+            <div id="resHits" class="text-2xl font-black text-emerald-600 mt-0.5">0/10</div>
+            <div class="text-[10px] text-slate-500">sin penalización</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-[11px] font-bold uppercase text-slate-400">Tiempo Total</div>
+            <div id="resTime" class="text-2xl font-black text-slate-900 font-mono-code mt-0.5">00:00</div>
+            <div class="text-[10px] text-slate-500">cronómetro oficial</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-[11px] font-bold uppercase text-slate-400">Poder Aportado</div>
+            <div id="resPower" class="text-2xl font-black text-indigo-600 mt-0.5">0 pts</div>
+            <div class="text-[10px] text-slate-500">impacto de facción</div>
+          </div>
+        </div>
+
+        <!-- Token de Batalla para Proyector en Vivo -->
+        <div class="bg-slate-900 text-white rounded-xl p-4 text-left space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">ID de Sesión & Token de Combate</span>
+            <button type="button" onclick="copyBattleToken()" class="text-[11px] font-bold bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded border border-slate-700 transition">
+              Copiar Token
+            </button>
+          </div>
+          <div id="sessionIdBox" class="font-mono-code text-xs sm:text-sm text-emerald-400 break-all select-all"></div>
+          <p class="text-[11px] text-slate-400">Registra tu resultado oficial en Google Sheets y descarga tu justificante CSV antes de cerrar.</p>
+        </div>
+
+        <!-- Botones de Envío y Respaldo CSV -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+          <button type="button" id="btnSubmitSheets" onclick="submitToGoogleSheets()"
+            class="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-extrabold text-sm shadow-sm transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            <span id="btnSubmitText">Enviar Acta a Google Sheets</span>
+          </button>
+
+          <button type="button" onclick="downloadCSV()"
+            class="w-full py-3.5 px-4 rounded-xl bg-white hover:bg-slate-50 border-2 border-slate-900 text-slate-900 font-extrabold text-sm transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Descargar Justificante (.CSV)</span>
+          </button>
+        </div>
+
+        <div id="submitStatusMsg" class="hidden p-3 rounded-xl text-xs font-bold"></div>
+      </div>
+
+      <!-- Desglose Técnico de Respuestas -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-3">
+        <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-500">Auditoría de Primeros Intentos (Q1 - Q10)</h3>
+        <div id="auditList" class="divide-y divide-slate-100 text-xs"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL PROYECTOR DE AULA: VISUALIZADOR DE COMBATE EN DIRECTO -->
+  <div id="projectorModal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-slate-900 border border-slate-700 text-white rounded-3xl max-w-4xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-auto">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-amber-400">IEB · Marcador de Proyección en Aula</span>
+          <h2 class="text-xl sm:text-2xl font-black tracking-tight mt-0.5">COMBATE CULTURAL EN DIRECTO: NETFLIX VS. TOYOTA</h2>
+        </div>
+        <button type="button" onclick="toggleProjectorModal()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Arena Visual Grande para Proyector -->
+      <div class="grid grid-cols-1 md:grid-cols-11 gap-4 items-center">
+        <!-- Luchador 1: Netflix -->
+        <div class="md:col-span-5 bg-gradient-to-br from-rose-950/90 to-slate-900 border-2 border-rose-500/60 rounded-2xl p-5 glow-netflix">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-black uppercase tracking-wider text-rose-400">Facción Alpha</span>
+            <span id="projNetflixCount" class="text-xs font-mono-code bg-rose-900/80 px-2 py-0.5 rounded text-rose-200">0 alumnos</span>
+          </div>
+          <h3 class="text-2xl font-black text-white">NETFLIX</h3>
+          <p class="text-xs text-rose-200/80 mt-1">Libertad, Densidad de Talento y Franqueza Radical</p>
+          <div class="mt-4 pt-3 border-t border-rose-800/50 flex items-baseline justify-between">
+            <span class="text-xs text-rose-300">Precisión Media 1er Intento:</span>
+            <span id="projNetflixAvg" class="text-3xl font-black font-mono-code text-rose-400">0.0%</span>
+          </div>
+        </div>
+
+        <!-- Centro VS -->
+        <div class="md:col-span-1 flex justify-center">
+          <div class="w-14 h-14 rounded-2xl bg-amber-400 text-slate-950 font-black text-lg flex items-center justify-center shadow-lg clash-badge">
+            VS
+          </div>
+        </div>
+
+        <!-- Luchador 2: Toyota -->
+        <div class="md:col-span-5 bg-gradient-to-bl from-indigo-950/90 to-slate-900 border-2 border-indigo-500/60 rounded-2xl p-5 glow-toyota">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-black uppercase tracking-wider text-indigo-400">Facción Omega</span>
+            <span id="projToyotaCount" class="text-xs font-mono-code bg-indigo-900/80 px-2 py-0.5 rounded text-indigo-200">0 alumnos</span>
+          </div>
+          <h3 class="text-2xl font-black text-white">TOYOTA</h3>
+          <p class="text-xs text-indigo-200/80 mt-1">Teoría Z, Consenso Nemawashi y Estabilidad</p>
+          <div class="mt-4 pt-3 border-t border-indigo-800/50 flex items-baseline justify-between">
+            <span class="text-xs text-indigo-300">Precisión Media 1er Intento:</span>
+            <span id="projToyotaAvg" class="text-3xl font-black font-mono-code text-indigo-400">0.0%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Dominio de Clase -->
+      <div class="space-y-2">
+        <div class="flex justify-between text-xs font-extrabold uppercase tracking-wider">
+          <span class="text-rose-400">Dominio Netflix: <span id="projAlphaShare">50%</span></span>
+          <span id="projWinnerBanner" class="text-amber-400">ESPERANDO DATOS DE COMBATE</span>
+          <span class="text-indigo-400">Dominio Toyota: <span id="projOmegaShare">50%</span></span>
+        </div>
+        <div class="relative h-6 w-full bg-indigo-600 rounded-full overflow-hidden border-2 border-slate-700">
+          <div id="projTugBar" class="vs-bar-fill h-full bg-gradient-to-r from-rose-600 via-rose-500 to-amber-400" style="width: 50%;"></div>
+        </div>
+      </div>
+
+      <!-- Consola del Docente para Consolidar Resultados en Tiempo Real -->
+      <div class="bg-slate-800/70 border border-slate-700 rounded-2xl p-4 space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Consolidación Rápida en Directo (Docente)</h4>
+            <p class="text-[11px] text-slate-400">Pega aquí filas copiadas desde Google Sheets o Tokens de Batalla de los alumnos (uno por línea) para actualizar el combate en vivo.</p>
+          </div>
+          <button type="button" onclick="loadDemoBattle()" class="shrink-0 text-[11px] font-bold px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-amber-300 transition">
+            Simular Combate Demo
+          </button>
+        </div>
+        <textarea id="bulkPasteArea" rows="3" placeholder="Pega aquí filas de Google Sheets (que incluyan NETFLIX o TOYOTA y la nota/aciertos) o tokens IEB-T6-..."
+          class="w-full rounded-xl bg-slate-950 border border-slate-700 p-3 text-xs font-mono-code text-slate-200 focus:outline-none focus:border-amber-400"></textarea>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="clearProjectorData()" class="px-3.5 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-xs font-bold text-slate-200">Limpiar</button>
+          <button type="button" onclick="computeProjectorStandings()" class="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black uppercase tracking-wider">
+            Actualizar Marcador en Vivo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="border-t border-slate-200 bg-white py-3 px-4 text-center text-[11px] text-slate-400">
+    IEB · Grado en Administración y Dirección de Empresas (2º ADE) · Sociología de la Empresa · Tema 6
+  </footer>
+
+  <script>
+    // =========================================================================
+    // CONFIGURACIÓN Y ENDPOINT DE GOOGLE APPS SCRIPT
+    // =========================================================================
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby7gaBFLYHeKMMAyGB_btuVHtHgM4W4uz4sygPf4lgJLN_mbYB_UyAMPpYdiX9aDR7O/exec";
+
+    // =========================================================================
+    // ESTADO GLOBAL DE LA SESIÓN
+    // =========================================================================
+    const state = {
+      sessionId: "",
+      nombre: "",
+      apellidos: "",
+      grupo: "",
+      email: "",
+      faction: "", // 'NETFLIX' | 'TOYOTA'
+      startTime: null,
+      elapsedSeconds: 0,
+      timerInterval: null,
+      currentRound: 0, // 0..4
+      combo: 0,
+      powerPoints: 0,
+      // Registro estricto del primer intento (q1..q10): true = acierto a la primera, false = fallo en primer intento, null = pendiente
+      firstAttemptResults: Array(10).fill(null),
+      firstAttemptDetails: Array(10).fill(""),
+      totalErrors: 0,
+      roundUnlocked: {
+        interactiveDone: false,
+        mcqDone: false
+      },
+      isSubmitting: false,
+      submitted: false
+    };
+
+    // =========================================================================
+    // UTILIDAD OBLIGATORIA: SHUFFLE ARRAY (Fisher-Yates)
+    // =========================================================================
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // =========================================================================
+    // BANCO DE CONTENIDOS ACADÉMICOS POR FACCIÓN (RIGOR UNIVERSITARIO IEB)
+    // =========================================================================
+    const BATTLE_DATA = {
+      NETFLIX: {
+        label: "Facción Alpha · Netflix Culture Deck",
+        themeColor: "rose",
+        rounds: [
+          // ASALTO 1: EDGAR SCHEIN (Artefactos, Valores Declarados y Supuestos Básicos)
+          {
+            title: "Asalto 1 · Anatomía Cultural de Schein en Netflix",
+            context: "Edgar Schein descompone la cultura organizacional en tres niveles de visibilidad (artefactos, valores declarados y supuestos tácitos). Netflix eliminó las políticas formales de vacaciones y gastos sustituyéndolas por la regla 'Actúa en el mejor interés de Netflix'.",
+            interactive: {
+              type: "classify",
+              qIndex: 0,
+              instruction: "Clasifica cada manifestación del Netflix Culture Deck en el nivel exacto del modelo de Edgar Schein:",
+              categories: ["Artefactos Visibles", "Valores Declarados", "Supuestos Básicos Tácitos"],
+              items: [
+                { id: "n1_a", text: "Ausencia de aprobación previa para viajes y vacaciones ilimitadas sin registro de días", correct: "Artefactos Visibles" },
+                { id: "n1_b", text: "El documento público 'Freedom & Responsibility' y el decálogo de franqueza radical", correct: "Valores Declarados" },
+                { id: "n1_c", text: "Creencia inconsciente de que los adultos responsables se autorregulan sin control burocrático", correct: "Supuestos Básicos Tácitos" },
+                { id: "n1_d", text: "El 'Keeper Test' aplicado por los managers para decidir despidos con indemnización generosa", correct: "Artefactos Visibles" }
+              ]
+            },
+            mcq: {
+              qIndex: 1,
+              question: "Según el modelo de Edgar Schein, ¿por qué el famoso 'Keeper Test' de Netflix (despedir a quien no retendrías si quisiera irse) puede generar una disonancia cultural si no está alineado con el tercer nivel del iceberg?",
+              options: [
+                {
+                  key: "A",
+                  text: "Porque si el supuesto tácito compartido por la plantilla asume que la empresa es una familia con seguridad laboral vitalicia, el artefacto del despido percibido como arbitrario destruye la confianza psicológica y paraliza la asunción de riesgos.",
+                  isCorrect: true
+                },
+                {
+                  key: "B",
+                  text: "Porque Schein establece que los valores declarados en los manuales corporativos determinan de forma automática los artefactos visibles, haciendo innecesario analizar las creencias inconscientes de los empleados.",
+                  isCorrect: false
+                },
+                {
+                  key: "C",
+                  text: "Porque en el marco teórico de Schein los artefactos materiales constituyen el núcleo inmutable de la organización, mientras que los supuestos básicos cambian trimestralmente según los resultados financieros.",
+                  isCorrect: false
+                }
+              ]
+            }
+          },
+          // ASALTO 2: MCGREGOR (TEORÍA X/Y) Y OUCHI (TEORÍA Z)
+          {
+            title: "Asalto 2 · Naturaleza Humana: Teoría Y Radical frente a Teoría Z",
+            context: "Douglas McGregor contrapuso la Teoría X (desconfianza y control jerárquico) frente a la Teoría Y (autodirección y motivación intrínseca), mientras William Ouchi formuló la Teoría Z basada en lealtad a largo plazo.",
+            interactive: {
+              type: "checklist",
+              qIndex: 2,
+              instruction: "Selecciona EXCLUSIVAMENTE las 3 premisas que definen la arquitectura sociológica de Netflix frente a la Teoría Z de Ouchi:",
+              options: [
+                { id: "n2_1", text: "Concepción de la empresa como un equipo deportivo profesional de alto rendimiento y no como una familia con vínculo vitalicio.", isCorrect: true },
+                { id: "n2_2", text: "Sustitución del control por procesos (Teoría X) por contexto estratégico y autonomía individual extrema (Teoría Y).", isCorrect: true },
+                { id: "n2_3", text: "Evaluación y promoción gradual a largo plazo basada en la antigüedad y el consenso colectivo del grupo de trabajo.", isCorrect: false },
+                { id: "n2_4", text: "Maximización de la densidad de talento mediante salarios en el tope del mercado y salida rápida del desempeño meramente adecuado.", isCorrect: true },
+                { id: "n2_5", text: "Estabilidad en el empleo garantizada para fomentar el compromiso moral y evitar la rotación interempresarial.", isCorrect: false }
+              ]
+            },
+            mcq: {
+              qIndex: 3,
+              question: "¿Qué paradoja sociológica emerge al contrastar el modelo de Netflix con la Teoría Y de Douglas McGregor y la Teoría Z de William Ouchi?",
+              options: [
+                {
+                  key: "A",
+                  text: "Netflix radicaliza la Teoría Y al eliminar reglas y supervisiones jerárquicas, pero rechaza la estabilidad laboral de la Teoría Z, sustituyendo la coacción burocrática por una presión constante de rendimiento individual.",
+                  isCorrect: true
+                },
+                {
+                  key: "B",
+                  text: "Netflix aplica íntegramente la Teoría Z de Ouchi al priorizar la cohesión comunitaria y el consenso lento sobre la velocidad de decisión, minimizando la competencia interna entre sus ingenieros.",
+                  isCorrect: false
+                },
+                {
+                  key: "C",
+                  text: "Netflix retorna a los postulados de la Teoría X clásica de McGregor, ya que exige fichajes estrictos, aprobación previa de gastos y sanciones disciplinarias ante cualquier desviación del procedimiento.",
+                  isCorrect: false
+                }
+              ]
+            }
+          },
+          // ASALTO 3: HARTMUT ROSA (ACELERACIÓN SOCIAL Y RESONANCIA)
+          {
+            title: "Asalto 3 · Aceleración Social y Riesgo de Burnout (Hartmut Rosa)",
+            context: "Hartmut Rosa analiza la modernidad tardía a través de tres dimensiones de aceleración (tecnológica, del cambio social y del ritmo de vida) y advierte sobre la alienación frente a los espacios de resonancia.",
+            interactive: {
+              type: "order",
+              qIndex: 4,
+              instruction: "Ordena secuencialmente la cadena causal de la 'Aceleración Social' de Hartmut Rosa aplicada al modelo operativo de Netflix:",
+              steps: [
+                "1. Aceleración tecnológica y disrupción del streaming obligan a abandonar el negocio físico del DVD.",
+                "2. Aceleración del cambio organizativo: supresión de comités de aprobación para decidir en tiempo real.",
+                "3. Aceleración del ritmo de vida laboral: exigencia continua de innovación y entrega en el tope de capacidad.",
+                "4. Riesgo de alienación y agotamiento psicosocial (burnout) si la franqueza radical carece de espacios de resonancia."
+              ]
+            },
+            mcq: {
+              qIndex: 5,
+              question: "Desde la sociología de Hartmut Rosa, ¿qué riesgo estructural encierra una cultura como la de Netflix que privilegia la adaptabilidad permanente sobre la estabilidad institucional?",
+              options: [
+                {
+                  key: "A",
+                  text: "La pérdida de 'resonancia' institucional: al volver efímeros los vínculos laborales y acelerar el ritmo vital, la eficiencia inmediata puede derivar en desorientación, inseguridad crónica y desgaste emocional.",
+                  isCorrect: true
+                },
+                {
+                  key: "B",
+                  text: "La caída en la 'jaula de hierro' burocrática descrita por Rosa, donde el exceso de antigüedad laboral impide la renovación tecnológica y estanca la productividad marginal de la organización.",
+                  isCorrect: false
+                },
+                {
+                  key: "C",
+                  text: "La imposibilidad de generar innovación tecnológica, puesto que Rosa demuestra que solo las organizaciones con jerarquías rígidas y procesos estables logran adaptarse a entornos volátiles.",
+                  isCorrect: false
+                }
+              ]
+            }
+          },
+          // ASALTO 4: MATRIZ DE ACTITUDES Y MENDELOW (STAKEHOLDERS Y CULTURA)
+          {
+            title: "Asalto 4 · Diagnóstico de Actitudes y Gestión de Stakeholders",
+            context: "En el Tema 6 se estudian la Matriz de Actitudes (adecuación axiológica vs. valoración de oportunidades) y la Matriz de Mendelow (poder vs. interés de los stakeholders).",
+            interactive: {
+              type: "match",
+              qIndex: 6,
+              instruction: "Asigna cada perfil o actor en el ecosistema de Netflix al cuadrante analítico correspondiente:",
+              pairs: [
+                {
+                  prompt: "Ingeniero senior que interioriza la franqueza radical y aprovecha la autonomía para liderar proyectos globales",
+                  options: ["Implicado (Alta adecuación / Alta oportunidad)", "Calculador (Baja adecuación / Alta oportunidad)", "Retraído (Baja adecuación / Baja oportunidad)", "Vocacional (Alta adecuación / Baja oportunidad)"],
+                  correct: "Implicado (Alta adecuación / Alta oportunidad)"
+                },
+                {
+                  prompt: "Directivo atraído únicamente por el salario en el percentil 90 que oculta errores para evitar el Keeper Test",
+                  options: ["Calculador (Baja adecuación / Alta oportunidad)", "Implicado (Alta adecuación / Alta oportunidad)", "Vocacional (Alta adecuación / Baja oportunidad)", "Retraído (Baja adecuación / Baja oportunidad)"],
+                  correct: "Calculador (Baja adecuación / Alta oportunidad)"
+                },
+                {
+                  prompt: "Sindicatos audiovisuales (WGA/SAG-AFTRA) con alta capacidad de paralizar rodajes y alto interés en residuales",
+                  options: ["Key Players / Promoters (Alto Poder / Alto Interés)", "Keep Satisfied / Latents (Alto Poder / Bajo Interés)", "Keep Informed / Defenders (Bajo Poder / Alto Interés)", "Minimal Effort / Apathetics (Bajo Poder / Bajo Interés)"],
+                  correct: "Key Players / Promoters (Alto Poder / Alto Interés)"
+                }
+              ]
+            },
+            mcq: {
+              qIndex: 7,
+              question: "¿Por qué el perfil 'Calculador' de la Matriz de Actitudes constituye la principal amenaza interna para la supervivencia del modelo cultural de Netflix?",
+              options: [
+                {
+                  key: "A",
+                  text: "Porque al existir un alto incentivo económico (salarios máximos) sin controles burocráticos, quien no comparte los valores (baja adecuación axiológica) puede comportarse de forma oportunista y erosionar la confianza mutua.",
+                  isCorrect: true
+                },
+                {
+                  key: "B",
+                  text: "Porque los empleados calculadores presentan una alta adecuación axiológica a los valores de la empresa pero rechazan cualquier oportunidad de promoción salarial o desarrollo profesional dentro de la compañía.",
+                  isCorrect: false
+                },
+                {
+                  key: "C",
+                  text: "Porque en la Matriz de Mendelow los perfiles calculadores poseen bajo poder y bajo interés, lo que obliga a la dirección a invertir recursos excesivos para mantenerlos satisfechos.",
+                  isCorrect: false
+                }
+              ]
+            }
+          },
+          // ASALTO 5: RSC, TRIPLE BOTTOM LINE (ELKINGTON) Y DOBLE MATERIALIDAD ESG
+          {
+            title: "Asalto 5 · Gobernanza, Triple Bottom Line y Doble Materialidad",
+            context: "John Elkington propuso el Triple Bottom Line (Profit, People, Planet) frente a la tesis de Milton Friedman, evolucionando hacia los criterios ESG y la Doble Materialidad europea.",
+            interactive: {
+              type: "classify",
+              qIndex: 8,
+              instruction: "Clasifica cada práctica corporativa de Netflix según los marcos de RSC, TBL y Doble Materialidad:",
+              categories: ["Materialidad Financiera (ESG)", "Materialidad de Impacto (ESG)", "Tesis Clásica de Milton Friedman"],
+              items: [
+                { id: "n5_a", text: "Riesgo de caída bursátil si una huelga de guionistas detiene los estrenos trimestrales de la plataforma", correct: "Materialidad Financiera (ESG)" },
+                { id: "n5_b", text: "Huella de carbono generada por los centros de datos globales de streaming y rodajes internacionales", correct: "Materialidad de Impacto (ESG)" },
+                { id: "n5_c", text: "Argumentar que pagar salarios altos y maximizar beneficios dentro de la ley agota la función social", correct: "Tesis Clásica de Milton Friedman" },
+                { id: "n5_d", text: "Efecto de los algoritmos de recomendación en la diversidad cultural y los hábitos de consumo juvenil", correct: "Materialidad de Impacto (ESG)" }
+              ]
+            },
+            mcq: {
+              qIndex: 9,
+              question: "Al evaluar la cultura de 'alta rotación y despido generoso' de Netflix bajo el enfoque de la Triple Cuenta de Resultados (Elkington) y ESG, ¿qué tensión estratégica surge en la dimensión 'People / Social'?",
+              options: [
+                {
+                  key: "A",
+                  text: "Aunque optimiza la eficiencia financiera (Profit) y la retribución individual, la precariedad contractual implícita externaliza costes de inseguridad laboral sobre el capital humano, tensionando la sostenibilidad social a largo plazo.",
+                  isCorrect: true
+                },
+                {
+                  key: "B",
+                  text: "El modelo de Elkington demuestra que el componente 'People' exige maximizar la rotación externa de empleados cada año para evitar que las empresas incurran en prácticas de greenwashing ambiental.",
+                  isCorrect: false
+                },
+                {
+                  key: "C",
+                  text: "La doble materialidad exime a las empresas tecnológicas de reportar impactos laborales sobre sus empleados siempre que sus emisiones directas de carbono sean neutras.",
+                  isCorrect: false
+                }
+              ]
+            }
+          }
+        ]
+      },
+
+      // =======================================================================
+      // FACCIÓN OMEGA: THE TOYOTA WAY (TEORÍA Z, CONSENSO Y CULTURA DE CLAN)
+      // =======================================================================
+      TOYOTA: {
+        label: "Facción Omega · The Toyota Way (Teoría Z)",
+        themeColor: "indigo",
+        rounds: [
+          // ASALTO 1: EDGAR SCHEIN EN TOYOTA
+          {
+            title: "Asalto 1 · Anatomía Cultural de Schein en Toyota",
+            context: "En contraposición a Netflix, The Toyota Way articula una cultura de cohesión profunda donde la estabilidad del empleo, la observación directa (Genchi Genbutsu) y la mejora continua (Kaizen) estructuran la organización.",
+            interactive: {
+              type: "classify",
+              qIndex: 0,
+              instruction: "Clasifica cada elemento de The Toyota Way en el nivel correspondiente del iceberg de Edgar Schein:",
+              categories: ["Artefactos Visibles", "Valores Declarados", "Supuestos Básicos Tácitos"],
+              items: [
+                { id: "t1_a", text: "El cordón Andon en la línea de montaje que permite a cualquier operario detener la fábrica ante un defecto", correct: "Artefactos Visibles" },
+                { id: "t1_b", text: "Los dos pilares oficiales del Toyota Way: 'Mejora Continua' y 'Respeto por las Personas'", correct: "Valores Declarados" },
+                { id: "t1_c", text: "Creencia tácita de que la empresa es una comunidad interdependiente donde el fallo es sistémico, no individual", correct: "Supuestos Básicos Tácitos" },
+                { id: "t1_d", text: "Las reuniones matinales de grupo (Asakai) y los tableros visuales de control Kaizen en planta", correct: "Artefactos Visibles" }
+              ]
+            },
+            mcq: {
+              qIndex: 1,
+              question: "¿Cómo explica el modelo de Edgar Schein que dos empresas occidentales copien los 'artefactos' de Toyota (cordón Andon, círculos de calidad) sin lograr su productividad ni cohesión?",
+              options: [
+                {
+                  key: "A",
+                  text: "Porque los artefactos visibles son ineficaces si los supuestos básicos inconscientes de la dirección siguen basados en la desconfianza (Teoría X), castigando al operario que detiene la línea en lugar de agradecer la detección del fallo.",
+                  isCorrect: true
+                },
+                {
+                  key: "B",
+                  text: "Porque Schein sostiene que los artefactos materiales representan el nivel más profundo e inalterable de una organización, siendo imposible transferir herramientas técnicas entre distintas industrias.",
+                  isCorrect: false
+                },
+                {
+                  key: "C",
+                  text: "Porque los valores declarados en los informes anuales de sostenibilidad sustituyen automáticamente a los supuestos culturales cuando la empresa cotiza en mercados internacionales.",
+                  isCorrect: false
+                }
+              ]
+            }
+          },
+          // ASALTO 2: TEORÍA Z DE WILLIAM OUCHI VS. NETFLIX
+          {
+            title: "Asalto 2 · La Teoría Z de Ouchi frente al Individualismo de Silicon Valley",
+            context: "William Ouchi formuló en los años 80 la Teoría Z integrando prácticas japonesas y estadounidenses: empleo a largo plazo, toma de decisiones consensuada y responsabilidad individual combinada con cohesión grupal.",
+            interactive: {
+              type: "checklist",
+              qIndex: 2,
+              instruction: "Selecciona EXCLUSIVAMENTE las 3 características estructurales de la Teoría Z de Ouchi presentes en Toyota frente a Netflix:",
+              options: [
+                { id: "t2_1", text: "Compromiso de empleo a largo plazo que incentiva la inversión mutua en formación y lealtad organizacional.", isCorrect: true },
+                { id: "t2_2", text: "Toma de decisiones consensuada (Nemawashi) con implementación rápida tras el acuerdo colectivo.", isCorrect: true },
+                { id: "t2_3", text: "Despido inmediato de trabajadores con desempeño adecuado para maximizar la densidad de talento estrella.", isCorrect: false },
+                { id: "t2_4", text: "Evaluación y promoción gradual a largo plazo que evita la competencia destructiva entre compañeros.", isCorrect: true },
+                { id: "t2_5", text: "Ausencia total de estándares operativos escritos para que cada empleado improvise su propio método.", isCorrect: false }
+              ]
+            },
+            mcq: {
+              qIndex: 3,
+              question: "¿En qué se diferencia fundamentalmente la Teoría Z de William Ouchi respecto a la Teoría Y de Douglas McGregor?",
+              options: [
+                {
+                  key: "A",
+                  text: "Mientras McGregor se enfoca en la motivación psicológica individual y la autodirección (Teoría Y), Ouchi enfatiza cómo la cultura organizacional cohesiva y la estabilidad comunitaria moldean el comportamiento colectivo.",
+                  isCorrect: true
+                },
+                {
+                  key: "B",
+                  text: "La Teoría Z de Ouchi recupera la coerción punitiva de la Teoría X para obligar a los empleados a aceptar decisiones unilaterales de la alta dirección sin consulta previa.",
+                  isCorrect: false
+                },
+                {
+                  key: "C",
+                  text: "Ouchi propone eliminar cualquier forma de responsabilidad individual, diluyendo la rendición de cuentas en comités anónimos sin jerarquía ni objetivos medibles.",
+                  isCorrect: false
+                }
+              ]
+            }
+          },
+          // ASALTO 3: HARTMUT ROSA (RESONANCIA VS ACELERACIÓN ALIENANTE)
+          {
+            title: "Asalto 3 · Estabilidad, Resonancia y Aceleración Social (Hartmut Rosa)",
+            context: "Frente a la vorágine de la aceleración social descrita por Hartmut Rosa, el modelo Toyota busca estabilizar los procesos y construir vínculos duraderos con empleados y proveedores.",
+            interactive: {
+              type: "order",
+              qIndex: 4,
+              instruction: "Ordena las fases mediante las cuales la cultura Toyota contrarresta los efectos alienantes de la aceleración social:",
+              steps: [
+                "1. Estabilidad contractual y socialización lenta que reduce la ansiedad por la supervivencia laboral inmediata.",
+                "2. Consulta previa y consenso (Nemawashi) para procesar los cambios tecnológicos sin ruptura social interna.",
+                "3. Mejora continua incremental (Kaizen) que integra la innovación en el saber hacer cotidiano del operario.",
+                "4. Creación de espacios de 'resonancia' organizacional donde el trabajador reconoce sentido en su obra colectiva."
+              ]
+            },
+            mcq: {
+              qIndex: 5,
+              question: "Según la teoría de la aceleración social de Hartmut Rosa, ¿cuál es la principal vulnerabilidad competitiva de una cultura basada en la estabilidad y el consenso lento como Toyota frente a una disrupción tecnológica abrupta?",
+              options: [
+                {
+                  key: "A",
+                  text: "La desincronización temporal: cuando la aceleración tecnológica externa (ej. transición al vehículo eléctrico y software) supera la velocidad de consenso interno, la estabilidad puede derivar en rigidez estratégica.",
+                  isCorrect: true
+                },
+                {
+                  key: "B",
+                  text: "La imposibilidad de generar espacios de resonancia, ya que Rosa afirma que la estabilidad laboral a largo plazo es la causa directa de la alienación y el burnout en la modernidad tardía.",
+                  isCorrect: false
+                },
+                {
+                  key: "C",
+                  text: "El aumento descontrolado de la rotación voluntaria de directivos, dado que los sistemas basados en la Teoría Z prohíben la formación interna y la promoción gradual.",
+                  isCorrect: false
+                }
+              ]
+            }
+          },
+          // ASALTO 4: MATRIZ DE ACTITUDES Y MENDELOW EN TOYOTA
+          {
+            title: "Asalto 4 · Perfiles Actitudinales y Red de Stakeholders en Toyota",
+            context: "Analizamos cómo la cultura Toyota configura la adecuación axiológica de su plantilla y gestiona su red de grupos de interés mediante las matrices del Tema 6.",
+            interactive: {
+              type: "match",
+              qIndex: 6,
+              instruction: "Asigna cada situación del ecosistema Toyota al cuadrante exacto de la Matriz de Actitudes o de Mendelow:",
+              pairs: [
+                {
+                  prompt: "Jefe de equipo que interioriza el espíritu Kaizen y asume la formación de nuevos operarios a largo plazo",
+                  options: ["Implicado (Alta adecuación / Alta oportunidad)", "Calculador (Baja adecuación / Alta oportunidad)", "Retraído (Baja adecuación / Baja oportunidad)", "Vocacional (Alta adecuación / Baja oportunidad)"],
+                  correct: "Implicado (Alta adecuación / Alta oportunidad)"
+                },
+                {
+                  prompt: "Operario veterano fiel a los valores históricos de la planta que rechaza ascender a puestos de gestión",
+                  options: ["Vocacional (Alta adecuación / Baja oportunidad)", "Calculador (Baja adecuación / Alta oportunidad)", "Retraído (Baja adecuación / Baja oportunidad)", "Implicado (Alta adecuación / Alta oportunidad)"],
+                  correct: "Vocacional (Alta adecuación / Baja oportunidad)"
+                },
+                {
+                  prompt: "Proveedores de primer nivel (Keiretsu) integrados en el sistema Just-in-Time con alta interdependencia",
+                  options: ["Key Players / Promoters (Alto Poder / Alto Interés)", "Minimal Effort / Apathetics (Bajo Poder / Bajo Interés)", "Keep Satisfied / Latents (Alto Poder / Bajo Interés)", "Keep Informed / Defenders (Bajo Poder / Alto Interés)"],
+                  correct: "Key Players / Promoters (Alto Poder / Alto Interés)"
+                }
+              ]
+            },
+            mcq: {
+              qIndex: 7,
+              question: "¿Qué diferencia estratégica existe entre gestionar a los proveedores bajo la lógica transaccional de mercado (Netflix) frente a clasificarlos como 'Key Players' en la Matriz de Mendelow (Toyota)?",
+              options: [
+                {
+                  key: "A",
+                  text: "Al reconocer su alto poder e interés en la continuidad operativa, Toyota construye alianzas cooperativas a largo plazo y transferencia tecnológica, reduciendo el oportunismo y garantizando calidad en origen.",
+                  isCorrect: true
+                },
+                {
+                  key: "B",
+                  text: "La Matriz de Mendelow prescribe que los actores con alto poder y alto interés deben ser tratados con 'esfuerzo mínimo' para evitar que influyan en las decisiones culturales de la compañía.",
+                  isCorrect: false
+                },
+                {
+                  key: "C",
+                  text: "En la Matriz de Actitudes, clasificar a un proveedor como 'Key Player' significa que posee baja adecuación axiológica y debe ser sustituido trimestralmente mediante subastas a la baja.",
+                  isCorrect: false
+                }
+              ]
+            }
+          },
+          // ASALTO 5: RSC, TRIPLE BOTTOM LINE Y DOBLE MATERIALIDAD EN TOYOTA
+          {
+            title: "Asalto 5 · Sostenibilidad, Caníbales con Tenedores y Doble Materialidad",
+            context: "John Elkington acuñó el 'Triple Bottom Line' (Profit, People, Planet) y la directiva europea consolidó la Doble Materialidad para evaluar tanto el riesgo financiero como el impacto socioambiental.",
+            interactive: {
+              type: "classify",
+              qIndex: 8,
+              instruction: "Clasifica cada dimensión estratégica de Toyota en las categorías de TBL y Doble Materialidad:",
+              categories: ["Materialidad Financiera (ESG)", "Materialidad de Impacto (ESG)", "Pilar People (Triple Bottom Line)"],
+              items: [
+                { id: "t5_a", text: "Pérdida de cuota de mercado en Europa y China si las normativas de emisiones penalizan motores híbridos", correct: "Materialidad Financiera (ESG)" },
+                { id: "t5_b", text: "Reducción efectiva de emisiones globales de CO2 mediante la electrificación de flotas y economía circular", correct: "Materialidad de Impacto (ESG)" },
+                { id: "t5_c", text: "Inversión continua en seguridad ergonómica en planta y protección del empleo frente a crisis cíclicas", correct: "Pilar People (Triple Bottom Line)" },
+                { id: "t5_d", text: "Impacto socioeconómico en el tejido industrial de las regiones donde se ubican sus plantas y proveedores", correct: "Materialidad de Impacto (ESG)" }
+              ]
+            },
+            mcq: {
+              qIndex: 9,
+              question: "¿Cómo conecta la metáfora de 'Caníbales con tenedores' de John Elkington con el contraste entre una cultura de 'supervivencia del más apto' (Netflix) y una cultura institucionalista (Toyota)?",
+              options: [
+                {
+                  key: "A",
+                  text: "Elkington sostiene que la competencia capitalista ('canibalismo') es inevitable, pero el progreso exige civilizarla ('con tenedores') integrando la justicia social (People) y ambiental (Planet) como condiciones de supervivencia.",
+                  isCorrect: true
+                },
+                {
+                  key: "B",
+                  text: "Elkington coincide con Milton Friedman en que cualquier gasto corporativo en bienestar laboral o sostenibilidad ambiental constituye una apropiación indebida del beneficio fiduciario de los accionistas.",
+                  isCorrect: false
+                },
+                {
+                  key: "C",
+                  text: "El concepto de 'Triple Bottom Line' establece que la rentabilidad económica (Profit) debe eliminarse de los balances corporativos una vez que la empresa obtiene una calificación ESG favorable.",
+                  isCorrect: false
+                }
+              ]
+            }
+          }
+        ]
+      }
+    };
+
+    // =========================================================================
+    // REGISTRO Y VALIDACIÓN DE ALUMNO IEB
+    // =========================================================================
+    document.getElementById("regForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const nombre = document.getElementById("inputNombre").value.trim();
+      const apellidos = document.getElementById("inputApellidos").value.trim();
+      const grupo = document.getElementById("inputGrupo").value.trim();
+      const email = document.getElementById("inputEmail").value.trim().toLowerCase();
+      const factionRadio = document.querySelector('input[name="faction"]:checked');
+      const errBox = document.getElementById("regError");
+
+      if (!nombre || !apellidos || !grupo || !email || !factionRadio) {
+        errBox.textContent = "Todos los campos y la selección de facción son obligatorios para entrar en el combate.";
+        errBox.classList.remove("hidden");
+        return;
+      }
+
+      if (!email.endsWith("@alumni-ieb.es") || email.indexOf("@") < 2) {
+        errBox.textContent = "Debes utilizar tu correo institucional válido terminado en @alumni-ieb.es.";
+        errBox.classList.remove("hidden");
+        return;
+      }
+
+      errBox.classList.add("hidden");
+
+      state.nombre = nombre;
+      state.apellidos = apellidos;
+      state.grupo = grupo;
+      state.email = email;
+      state.faction = factionRadio.value;
+      state.sessionId = `IEB-T6-${state.faction}-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+      state.startTime = Date.now();
+
+      // Configurar cabecera y HUD
+      const badge = document.getElementById("factionBadgeHeader");
+      badge.classList.remove("hidden");
+      if (state.faction === "NETFLIX") {
+        badge.textContent = "ALPHA · NETFLIX";
+        badge.className = "text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 border border-rose-200";
+      } else {
+        badge.textContent = "OMEGA · TOYOTA";
+        badge.className = "text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 border border-indigo-200";
+      }
+
+      document.getElementById("registrationScreen").classList.add("hidden");
+      document.getElementById("battleHud").classList.remove("hidden");
+      document.getElementById("arenaScreen").classList.remove("hidden");
+
+      startTimer();
+      updateBattleHud();
+      renderRound(0);
+    });
+
+    function startTimer() {
+      state.timerInterval = setInterval(() => {
+        state.elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);
+        document.getElementById("timerDisplay").textContent = formatTime(state.elapsedSeconds);
+      }, 1000);
+    }
+
+    function formatTime(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, "0");
+      const s = String(sec % 60).padStart(2, "0");
+      return `${m}:${s}`;
+    }
+
+    // =========================================================================
+    // ACTUALIZACIÓN DINÁMICA DEL HUD DE COMBATE (VISUAL JAW-DROPPING)
+    // =========================================================================
+    function updateBattleHud() {
+      document.getElementById("roundCounter").textContent = state.currentRound + 1;
+      const comboBadge = document.getElementById("comboBadge");
+      if (state.combo >= 2) {
+        comboBadge.textContent = `COMBO x${state.combo} 🔥`;
+        comboBadge.classList.remove("hidden");
+      } else {
+        comboBadge.classList.add("hidden");
+      }
+
+      // Calcular ventaja visual en la barra de combate según aciertos/fallos del jugador
+      const hits = state.firstAttemptResults.filter(r => r === true).length;
+      const misses = state.firstAttemptResults.filter(r => r === false).length;
+      const swing = (hits * 4.2) - (misses * 3.5);
+
+      let alphaPct = 50;
+      if (state.faction === "NETFLIX") {
+        alphaPct = Math.min(88, Math.max(15, Math.round(50 + swing)));
+      } else {
+        alphaPct = Math.min(85, Math.max(12, Math.round(50 - swing)));
+      }
+      const omegaPct = 100 - alphaPct;
+
+      document.getElementById("hudAlphaScore").textContent = `${alphaPct}%`;
+      document.getElementById("hudOmegaScore").textContent = `${omegaPct}%`;
+      document.getElementById("tugBarAlpha").style.width = `${alphaPct}%`;
+      document.getElementById("clashSparkIcon").style.left = `${alphaPct}%`;
+    }
+
+    // =========================================================================
+    // RENDERIZADO DE ASALTOS (5 SALAS / MISIONES)
+    // =========================================================================
+    function renderRoundPills() {
+      const container = document.getElementById("roundPills");
+      container.innerHTML = "";
+      for (let i = 0; i < 5; i++) {
+        const isCurrent = i === state.currentRound;
+        const isDone = i < state.currentRound;
+        let cls = "h-2 rounded-full transition-all ";
+        if (isDone) {
+          cls += state.faction === "NETFLIX" ? "bg-rose-600" : "bg-indigo-600";
+        } else if (isCurrent) {
+          cls += "bg-slate-900 ring-2 ring-slate-300";
+        } else {
+          cls += "bg-slate-200";
+        }
+        const div = document.createElement("div");
+        div.className = cls;
+        container.appendChild(div);
+      }
+    }
+
+    function renderRound(roundIdx) {
+      state.currentRound = roundIdx;
+      state.roundUnlocked = { interactiveDone: false, mcqDone: false };
+      renderRoundPills();
+      updateBattleHud();
+
+      const factionObj = BATTLE_DATA[state.faction];
+      const round = factionObj.rounds[roundIdx];
+      const accentBorder = state.faction === "NETFLIX" ? "border-rose-200 bg-rose-50/40" : "border-indigo-200 bg-indigo-50/40";
+      const accentText = state.faction === "NETFLIX" ? "text-rose-700" : "text-indigo-700";
+
+      const container = document.getElementById("roundContainer");
+      container.innerHTML = `
+        <div class="border-b border-slate-100 pb-4">
+          <div class="flex items-center justify-between gap-2 mb-1">
+            <span class="text-xs font-black uppercase tracking-wider ${accentText}">${factionObj.label}</span>
+            <span class="text-xs font-mono-code font-bold text-slate-400">PREGUNTAS Q${round.interactive.qIndex + 1} & Q${round.mcq.qIndex + 1}</span>
+          </div>
+          <h2 class="text-lg sm:text-xl font-black text-slate-900">${round.title}</h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed ${accentBorder} border p-3 rounded-xl">${round.context}</p>
+        </div>
+
+        <!-- PARTE A: RETO INTERACTIVO -->
+        <div id="interactiveBlock" class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-slate-800">
+              <span class="w-5 h-5 rounded-md bg-slate-900 text-white flex items-center justify-center text-[11px]">A</span>
+              Reto Operativo (Q${round.interactive.qIndex + 1})
+            </span>
+            <span id="statusPartA" class="text-xs font-bold text-amber-600">Bloqueado</span>
+          </div>
+          <p class="text-xs sm:text-sm font-semibold text-slate-800">${round.interactive.instruction}</p>
+          <div id="interactiveWidget" class="space-y-2.5"></div>
+          <div id="feedbackPartA" class="hidden p-3 rounded-xl text-xs font-semibold"></div>
+          <button type="button" id="btnCheckPartA" onclick="verifyInteractive()"
+            class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold uppercase tracking-wider transition">
+            Validar Reto Operativo
+          </button>
+        </div>
+
+        <hr class="border-slate-200" />
+
+        <!-- PARTE B: DILEMA CONCEPTUAL TIPO TEST -->
+        <div id="mcqBlock" class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-slate-800">
+              <span class="w-5 h-5 rounded-md bg-slate-900 text-white flex items-center justify-center text-[11px]">B</span>
+              Dilema Teórico (Q${round.mcq.qIndex + 1})
+            </span>
+            <span id="statusPartB" class="text-xs font-bold text-amber-600">Bloqueado</span>
+          </div>
+          <p class="text-xs sm:text-sm font-bold text-slate-900 leading-snug">${round.mcq.question}</p>
+          <div id="mcqOptionsContainer" class="space-y-2.5"></div>
+          <div id="feedbackPartB" class="hidden p-3 rounded-xl text-xs font-semibold"></div>
+          <button type="button" id="btnCheckPartB" onclick="verifyMcq()"
+            class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold uppercase tracking-wider transition">
+            Validar Dilema Teórico
+          </button>
+        </div>
+
+        <!-- BOTÓN DESBLOQUEO DE ASALTO -->
+        <div class="pt-3 border-t border-slate-100 flex justify-end">
+          <button type="button" id="btnNextRound" disabled onclick="advanceRound()"
+            class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-extrabold text-sm tracking-wide shadow-sm transition flex items-center justify-center gap-2">
+            <span id="btnNextRoundLabel">${roundIdx < 4 ? "ASESTAR GOLPE Y PASAR AL SIGUIENTE ASALTO" : "GOLPE FINAL Y VEREDICTO DE COMBATE"}</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </button>
+        </div>
+      `;
+
+      buildInteractiveWidget(round.interactive);
+      buildMcqWidget(round.mcq);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // =========================================================================
+    // CONSTRUCCIÓN DE WIDGETS INTERACTIVOS ALEATORIZADOS
+    // =========================================================================
+    let currentOrderState = [];
+
+    function buildInteractiveWidget(inter) {
+      const box = document.getElementById("interactiveWidget");
+      box.innerHTML = "";
+
+      if (inter.type === "classify") {
+        const shuffledItems = shuffleArray(inter.items);
+        const shuffledCats = shuffleArray(inter.categories);
+        shuffledItems.forEach((item) => {
+          const row = document.createElement("div");
+          row.className = "p-3 rounded-xl border border-slate-200 bg-slate-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5";
+          row.innerHTML = `
+            <span class="text-xs font-medium text-slate-800 leading-snug flex-1">${item.text}</span>
+            <select data-item-id="${item.id}" class="classify-select shrink-0 sm:w-56 px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900">
+              <option value="">-- Selecciona categoría --</option>
+              ${shuffledCats.map(c => `<option value="${c}">${c}</option>`).join("")}
+            </select>
+          `;
+          box.appendChild(row);
+        });
+      } else if (inter.type === "checklist") {
+        const shuffledOpts = shuffleArray(inter.options);
+        shuffledOpts.forEach((opt) => {
+          const label = document.createElement("label");
+          label.className = "flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100/70 cursor-pointer transition";
+          label.innerHTML = `
+            <input type="checkbox" value="${opt.id}" class="checklist-input mt-0.5 w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900" />
+            <span class="text-xs text-slate-800 leading-relaxed">${opt.text}</span>
+          `;
+          box.appendChild(label);
+        });
+      } else if (inter.type === "order") {
+        // Barajar pasos hasta garantizar que no coincidan exactamente con el orden correcto
+        let shuffled = shuffleArray(inter.steps);
+        while (shuffled.every((val, idx) => val === inter.steps[idx])) {
+          shuffled = shuffleArray(inter.steps);
+        }
+        // Limpiar prefijos numéricos visibles para que el alumno razone el orden sin pistas
+        currentOrderState = shuffled.map(s => s.replace(/^\d+\.\s*/, ""));
+        renderOrderList();
+      } else if (inter.type === "match") {
+        const shuffledPairs = shuffleArray(inter.pairs);
+        shuffledPairs.forEach((pair, idx) => {
+          const shuffledChoices = shuffleArray(pair.options);
+          const card = document.createElement("div");
+          card.className = "p-3 rounded-xl border border-slate-200 bg-slate-50/70 space-y-2";
+          card.innerHTML = `
+            <div class="text-xs font-semibold text-slate-800">${pair.prompt}</div>
+            <select data-pair-prompt="${pair.prompt}" class="match-select w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900">
+              <option value="">-- Asigna clasificación exacta --</option>
+              ${shuffledChoices.map(c => `<option value="${c}">${c}</option>`).join("")}
+            </select>
+          `;
+          box.appendChild(card);
+        });
+      }
+    }
+
+    function renderOrderList() {
+      const box = document.getElementById("interactiveWidget");
+      box.innerHTML = "";
+      currentOrderState.forEach((stepText, idx) => {
+        const row = document.createElement("div");
+        row.className = "flex items-center justify-between gap-2 p-3 rounded-xl border border-slate-200 bg-slate-50";
+        row.innerHTML = `
+          <div class="flex items-center gap-2.5 flex-1">
+            <span class="w-6 h-6 rounded-lg bg-slate-900 text-white font-mono-code text-xs font-bold flex items-center justify-center shrink-0">${idx + 1}</span>
+            <span class="text-xs text-slate-800 leading-snug">${stepText}</span>
+          </div>
+          <div class="flex items-center gap-1 shrink-0">
+            <button type="button" onclick="moveOrderStep(${idx}, -1)" ${idx === 0 ? "disabled" : ""}
+              class="p-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-30 text-slate-700" title="Subir">
+              ▲
+            </button>
+            <button type="button" onclick="moveOrderStep(${idx}, 1)" ${idx === currentOrderState.length - 1 ? "disabled" : ""}
+              class="p-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-30 text-slate-700" title="Bajar">
+              ▼
+            </button>
+          </div>
+        `;
+        box.appendChild(row);
+      });
+    }
+
+    function moveOrderStep(index, delta) {
+      if (state.roundUnlocked.interactiveDone) return;
+      const newIndex = index + delta;
+      if (newIndex < 0 || newIndex >= currentOrderState.length) return;
+      const temp = currentOrderState[index];
+      currentOrderState[index] = currentOrderState[newIndex];
+      currentOrderState[newIndex] = temp;
+      renderOrderList();
+    }
+
+    function buildMcqWidget(mcq) {
+      const box = document.getElementById("mcqOptionsContainer");
+      box.innerHTML = "";
+      const shuffledOpts = shuffleArray(mcq.options);
+      const letters = ["A", "B", "C"];
+
+      shuffledOpts.forEach((opt, i) => {
+        const label = document.createElement("label");
+        label.className = "flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 cursor-pointer transition";
+        label.innerHTML = `
+          <input type="radio" name="mcqCurrent" value="${opt.isCorrect ? "1" : "0"}" data-opt-text="${opt.text.substring(0, 45)}..."
+            class="mt-1 w-4 h-4 text-slate-900 border-slate-300 focus:ring-slate-900" />
+          <div class="text-xs text-slate-800 leading-relaxed">
+            <span class="font-black text-slate-900 mr-1">${letters[i]}.</span>${opt.text}
+          </div>
+        `;
+        box.appendChild(label);
+      });
+    }
+
+    // =========================================================================
+    // VALIDACIÓN Y REGISTRO ESTRICTO AL PRIMER INTENTO
+    // =========================================================================
+    function verifyInteractive() {
+      if (state.roundUnlocked.interactiveDone) return;
+      const round = BATTLE_DATA[state.faction].rounds[state.currentRound];
+      const inter = round.interactive;
+      const qIdx = inter.qIndex;
+      const fb = document.getElementById("feedbackPartA");
+
+      let isComplete = true;
+      let isCorrect = false;
+
+      if (inter.type === "classify") {
+        const selects = Array.from(document.querySelectorAll(".classify-select"));
+        if (selects.some(s => !s.value)) isComplete = false;
+        if (isComplete) {
+          isCorrect = selects.every(sel => {
+            const itemObj = inter.items.find(it => it.id === sel.dataset.itemId);
+            return itemObj && itemObj.correct === sel.value;
+          });
+        }
+      } else if (inter.type === "checklist") {
+        const checked = Array.from(document.querySelectorAll(".checklist-input:checked")).map(c => c.value);
+        if (checked.length === 0) isComplete = false;
+        if (isComplete) {
+          const correctIds = inter.options.filter(o => o.isCorrect).map(o => o.id);
+          isCorrect = checked.length === correctIds.length && correctIds.every(id => checked.includes(id));
+        }
+      } else if (inter.type === "order") {
+        const expectedClean = inter.steps.map(s => s.replace(/^\d+\.\s*/, ""));
+        isCorrect = currentOrderState.every((val, i) => val === expectedClean[i]);
+      } else if (inter.type === "match") {
+        const selects = Array.from(document.querySelectorAll(".match-select"));
+        if (selects.some(s => !s.value)) isComplete = false;
+        if (isComplete) {
+          isCorrect = selects.every(sel => {
+            const pairObj = inter.pairs.find(p => p.prompt === sel.dataset.pairPrompt);
+            return pairObj && pairObj.correct === sel.value;
+          });
+        }
+      }
+
+      if (!isComplete) {
+        fb.textContent = "Completa todas las asignaciones o selecciones antes de validar el reto.";
+        fb.className = "p-3 rounded-xl text-xs font-semibold bg-amber-50 border border-amber-200 text-amber-800";
+        fb.classList.remove("hidden");
+        return;
+      }
+
+      // Registrar primer intento si aún es null
+      if (state.firstAttemptResults[qIdx] === null) {
+        state.firstAttemptResults[qIdx] = isCorrect;
+        state.firstAttemptDetails[qIdx] = isCorrect ? "Acierto 1er intento" : "Fallo 1er intento";
+        if (!isCorrect) state.totalErrors++;
+      }
+
+      if (isCorrect) {
+        state.roundUnlocked.interactiveDone = true;
+        state.combo++;
+        state.powerPoints += 100 + (state.combo * 15);
+        fb.textContent = "¡Impacto directo! Reto operativo superado y candado A desbloqueado.";
+        fb.className = "p-3 rounded-xl text-xs font-bold bg-emerald-50 border border-emerald-200 text-emerald-800";
+        fb.classList.remove("hidden");
+        document.getElementById("statusPartA").textContent = "Desbloqueado ✓";
+        document.getElementById("statusPartA").className = "text-xs font-extrabold text-emerald-600";
+        document.getElementById("btnCheckPartA").disabled = true;
+        document.getElementById("btnCheckPartA").classList.add("opacity-40", "cursor-not-allowed");
+        triggerVisualHit(true);
+        checkRoundUnlock();
+      } else {
+        state.combo = 0;
+        fb.textContent = "Fallo táctico registrado en el acta de primer intento. Revisa las categorías o secuencia e inténtalo de nuevo para desbloquear el candado.";
+        fb.className = "p-3 rounded-xl text-xs font-bold bg-red-50 border border-red-200 text-red-700";
+        fb.classList.remove("hidden");
+        triggerVisualHit(false);
+      }
+      updateBattleHud();
+    }
+
+    function verifyMcq() {
+      if (state.roundUnlocked.mcqDone) return;
+      const round = BATTLE_DATA[state.faction].rounds[state.currentRound];
+      const qIdx = round.mcq.qIndex;
+      const selected = document.querySelector('input[name="mcqCurrent"]:checked');
+      const fb = document.getElementById("feedbackPartB");
+
+      if (!selected) {
+        fb.textContent = "Selecciona una de las tres opciones teóricas (A, B o C) antes de validar.";
+        fb.className = "p-3 rounded-xl text-xs font-semibold bg-amber-50 border border-amber-200 text-amber-800";
+        fb.classList.remove("hidden");
+        return;
+      }
+
+      const isCorrect = selected.value === "1";
+
+      // Registrar primer intento si aún es null
+      if (state.firstAttemptResults[qIdx] === null) {
+        state.firstAttemptResults[qIdx] = isCorrect;
+        state.firstAttemptDetails[qIdx] = isCorrect ? "Acierto 1er intento" : "Fallo 1er intento";
+        if (!isCorrect) state.totalErrors++;
+      }
+
+      if (isCorrect) {
+        state.roundUnlocked.mcqDone = true;
+        state.combo++;
+        state.powerPoints += 120 + (state.combo * 20);
+        fb.textContent = "¡Argumento sólido! Dilema teórico resuelto y candado B desbloqueado.";
+        fb.className = "p-3 rounded-xl text-xs font-bold bg-emerald-50 border border-emerald-200 text-emerald-800";
+        fb.classList.remove("hidden");
+        document.getElementById("statusPartB").textContent = "Desbloqueado ✓";
+        document.getElementById("statusPartB").className = "text-xs font-extrabold text-emerald-600";
+        document.getElementById("btnCheckPartB").disabled = true;
+        document.getElementById("btnCheckPartB").classList.add("opacity-40", "cursor-not-allowed");
+        triggerVisualHit(true);
+        checkRoundUnlock();
+      } else {
+        state.combo = 0;
+        fb.textContent = "Respuesta incorrecta (fallo contabilizado en primer intento). Relee el marco sociológico y selecciona la opción correcta para avanzar.";
+        fb.className = "p-3 rounded-xl text-xs font-bold bg-red-50 border border-red-200 text-red-700";
+        fb.classList.remove("hidden");
+        triggerVisualHit(false);
+      }
+      updateBattleHud();
+    }
+
+    function triggerVisualHit(success) {
+      const card = document.getElementById("roundContainer");
+      card.classList.remove("shake-card", "flash-success", "flash-error");
+      void card.offsetWidth; // Reflow para reiniciar animación
+      if (success) {
+        card.classList.add("flash-success");
+      } else {
+        card.classList.add("shake-card", "flash-error");
+      }
+    }
+
+    function checkRoundUnlock() {
+      if (state.roundUnlocked.interactiveDone && state.roundUnlocked.mcqDone) {
+        document.getElementById("btnNextRound").disabled = false;
+      }
+    }
+
+    function advanceRound() {
+      if (state.currentRound < 4) {
+        renderRound(state.currentRound + 1);
+      } else {
+        finishPractice();
+      }
+    }
+
+    // =========================================================================
+    // FINALIZACIÓN, CÁLCULO DE NOTA Y ENVÍO A GOOGLE SHEETS / CSV
+    // =========================================================================
+    function calculateFinalScore() {
+      const hits = state.firstAttemptResults.filter(r => r === true).length;
+      // Cada uno de los 10 ítems vale 1.00 punto al primer intento (0 a 10)
+      return {
+        hits,
+        grade: Number(hits.toFixed(2))
+      };
+    }
+
+    function finishPractice() {
+      clearInterval(state.timerInterval);
+      state.elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);
+      const { hits, grade } = calculateFinalScore();
+
+      document.getElementById("arenaScreen").classList.add("hidden");
+      document.getElementById("resultsScreen").classList.remove("hidden");
+
+      const banner = document.getElementById("finalFactionBanner");
+      if (state.faction === "NETFLIX") {
+        banner.textContent = "FACCIÓN ALPHA · NETFLIX CULTURE DECK";
+        banner.className = "inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-rose-100 text-rose-800 border border-rose-200";
+      } else {
+        banner.textContent = "FACCIÓN OMEGA · THE TOYOTA WAY (TEORÍA Z)";
+        banner.className = "inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-indigo-100 text-indigo-800 border border-indigo-200";
+      }
+
+      document.getElementById("finalStudentMeta").textContent =
+        `${state.nombre} ${state.apellidos} · Grupo ${state.grupo} · ${state.email}`;
+      document.getElementById("resGrade").textContent = grade.toFixed(2);
+      document.getElementById("resHits").textContent = `${hits}/10`;
+      document.getElementById("resTime").textContent = formatTime(state.elapsedSeconds);
+      document.getElementById("resPower").textContent = `${state.powerPoints} pts`;
+
+      // Token compacto para proyectar/pegar en el marcador de aula
+      const battleToken = `${state.sessionId}|${state.faction}|${grade.toFixed(2)}|${hits}/10|${state.nombre} ${state.apellidos}`;
+      document.getElementById("sessionIdBox").textContent = battleToken;
+
+      // Renderizar auditoría de Q1..Q10
+      const auditList = document.getElementById("auditList");
+      auditList.innerHTML = "";
+      state.firstAttemptResults.forEach((res, idx) => {
+        const row = document.createElement("div");
+        row.className = "py-2.5 flex items-center justify-between";
+        row.innerHTML = `
+          <span class="font-bold text-slate-700">Ítem Q${idx + 1} (${idx % 2 === 0 ? "Reto Operativo" : "Dilema Teórico"})</span>
+          <span class="font-mono-code font-bold px-2.5 py-0.5 rounded-full ${res ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-700"}">
+            ${res ? "1.00 pt (Acierto 1º)" : "0.00 pts (Fallo 1º)"}
+          </span>
+        `;
+        auditList.appendChild(row);
+      });
+
+      // Guardar localmente para el proyector de aula en el mismo dispositivo
+      saveLocalBattleRecord({
+        sessionId: state.sessionId,
+        faction: state.faction,
+        grade: grade,
+        hits: hits,
+        student: `${state.nombre} ${state.apellidos}`
+      });
+    }
+
+    function copyBattleToken() {
+      const text = document.getElementById("sessionIdBox").textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Token de combate copiado al portapapeles.");
+      });
+    }
+
+    function submitToGoogleSheets() {
+      if (state.isSubmitting || state.submitted) return;
+      state.isSubmitting = true;
+
+      const btn = document.getElementById("btnSubmitSheets");
+      const btnText = document.getElementById("btnSubmitText");
+      const statusMsg = document.getElementById("submitStatusMsg");
+
+      btn.disabled = true;
+      btn.style.pointerEvents = "none";
+      btnText.textContent = "Transmitiendo Acta...";
+
+      const { hits, grade } = calculateFinalScore();
+      const params = new URLSearchParams();
+
+      params.append("tema", "Tema 6 - Cultura Organizacional (Netflix vs Toyota)");
+      params.append("sessionId", state.sessionId);
+      params.append("fecha", new Date().toISOString());
+      params.append("nombre", state.nombre);
+      params.append("apellidos", state.apellidos);
+      params.append("grupo", state.grupo);
+      params.append("email", state.email);
+      params.append("faccion", state.faction);
+      params.append("tiempoSegundos", String(state.elapsedSeconds));
+      params.append("tiempoFormateado", formatTime(state.elapsedSeconds));
+      params.append("fallosPrimerIntento", String(state.totalErrors));
+      params.append("aciertosPrimerIntento", String(hits));
+      params.append("poderCombate", String(state.powerPoints));
+
+      // Alias múltiples requeridos para la nota
+      const gradeStr = grade.toFixed(2);
+      params.append("nota", gradeStr);
+      params.append("notaFinal", gradeStr);
+      params.append("score", gradeStr);
+      params.append("calificacion", gradeStr);
+      params.append("grade", gradeStr);
+
+      // Desglose q1 a q10
+      state.firstAttemptResults.forEach((val, idx) => {
+        params.append(`q${idx + 1}`, val ? "1" : "0");
+      });
+
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+        },
+        body: params.toString()
+      })
+      .then(() => {
+        state.submitted = true;
+        state.isSubmitting = false;
+        btnText.textContent = "Acta Registrada en Google Sheets ✓";
+        btn.classList.remove("bg-emerald-600", "hover:bg-emerald-700");
+        btn.classList.add("bg-slate-800");
+        statusMsg.textContent = "Envío completado sin duplicados. Descarga también tu justificante CSV como respaldo local.";
+        statusMsg.className = "p-3 rounded-xl text-xs font-bold bg-emerald-50 border border-emerald-200 text-emerald-800";
+        statusMsg.classList.remove("hidden");
+      })
+      .catch(() => {
+        // Reabrir candado solo si falló la red
+        state.isSubmitting = false;
+        btn.disabled = false;
+        btn.style.pointerEvents = "auto";
+        btnText.textContent = "Reintentar Envío a Google Sheets";
+        statusMsg.textContent = "Error de conexión al enviar. Por favor, reintenta o descarga el justificante CSV.";
+        statusMsg.className = "p-3 rounded-xl text-xs font-bold bg-red-50 border border-red-200 text-red-700";
+        statusMsg.classList.remove("hidden");
+      });
+    }
+
+    function downloadCSV() {
+      const { hits, grade } = calculateFinalScore();
+      const headers = [
+        "SessionID", "Fecha", "Tema", "Faccion", "Nombre", "Apellidos", "Grupo", "Email",
+        "NotaFinal", "Aciertos1erIntento", "Fallos1erIntento", "TiempoSegundos", "PoderCombate",
+        "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10"
+      ];
+      const row = [
+        state.sessionId,
+        new Date().toISOString(),
+        "Tema 6 - Combate Cultural Netflix vs Toyota",
+        state.faction,
+        state.nombre,
+        state.apellidos,
+        state.grupo,
+        state.email,
+        grade.toFixed(2),
+        hits,
+        state.totalErrors,
+        state.elapsedSeconds,
+        state.powerPoints,
+        ...state.firstAttemptResults.map(v => (v ? 1 : 0))
+      ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(",");
+
+      const csvContent = "\uFEFF" + headers.join(",") + "\n" + row;
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `IEB_Tema6_${state.faction}_${state.apellidos.replace(/\s+/g, "_")}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // =========================================================================
+    // MODO PROYECTOR EN AULA: CONSOLIDACIÓN Y VISUALIZACIÓN DE COMBATE EN VIVO
+    // =========================================================================
+    function toggleProjectorModal() {
+      const modal = document.getElementById("projectorModal");
+      modal.classList.toggle("hidden");
+      if (!modal.classList.contains("hidden")) {
+        refreshProjectorFromLocal();
+      }
+    }
+
+    function saveLocalBattleRecord(record) {
+      try {
+        const existing = JSON.parse(localStorage.getItem("ieb_t6_battle_records") || "[]");
+        if (!existing.some(r => r.sessionId === record.sessionId)) {
+          existing.push(record);
+          localStorage.setItem("ieb_t6_battle_records", JSON.stringify(existing));
+        }
+      } catch (e) {}
+    }
+
+    function refreshProjectorFromLocal() {
+      try {
+        const existing = JSON.parse(localStorage.getItem("ieb_t6_battle_records") || "[]");
+        if (existing.length > 0) {
+          renderProjectorStats(existing);
+        }
+      } catch (e) {}
+    }
+
+    function computeProjectorStandings() {
+      const raw = document.getElementById("bulkPasteArea").value.trim();
+      const lines = raw.split(/\r?\n/).filter(l => l.trim().length > 0);
+      const parsed = [];
+
+      lines.forEach((line, idx) => {
+        const upper = line.toUpperCase();
+        let faction = null;
+        if (upper.includes("NETFLIX")) faction = "NETFLIX";
+        else if (upper.includes("TOYOTA")) faction = "TOYOTA";
+        if (!faction) return;
+
+        // Extraer puntuación (busca formato X/10 o número decimal 0..10)
+        let grade = 0;
+        const ratioMatch = line.match(/(\d+(?:\.\d+)?)\s*\/\s*10/);
+        if (ratioMatch) {
+          grade = parseFloat(ratioMatch[1]);
+        } else {
+          // Buscar columnas separadas por tabulador o coma (Google Sheets copy-paste)
+          const cols = line.split(/\t|,|;/).map(c => c.replace(/"/g, "").trim());
+          const numCandidates = cols
+            .map(c => parseFloat(c.replace(",", ".")))
+            .filter(n => !isNaN(n) && n >= 0 && n <= 10);
+          if (numCandidates.length > 0) {
+            grade = numCandidates[0];
+          }
+        }
+        parsed.push({ sessionId: `PASTE-${idx}`, faction, grade });
+      });
+
+      if (parsed.length === 0) {
+        alert("No se detectaron filas válidas con 'NETFLIX' o 'TOYOTA' y una puntuación de 0 a 10.");
+        return;
+      }
+      renderProjectorStats(parsed);
+    }
+
+    function loadDemoBattle() {
+      const demoLines = [
+        "IEB-T6-NETFLIX-01|NETFLIX|8.00|8/10|Alumno Demo 1",
+        "IEB-T6-NETFLIX-02|NETFLIX|9.00|9/10|Alumno Demo 2",
+        "IEB-T6-NETFLIX-03|NETFLIX|7.00|7/10|Alumno Demo 3",
+        "IEB-T6-TOYOTA-01|TOYOTA|9.00|9/10|Alumno Demo 4",
+        "IEB-T6-TOYOTA-02|TOYOTA|10.00|10/10|Alumno Demo 5",
+        "IEB-T6-TOYOTA-03|TOYOTA|8.00|8/10|Alumno Demo 6"
+      ];
+      document.getElementById("bulkPasteArea").value = demoLines.join("\n");
+      computeProjectorStandings();
+    }
+
+    function clearProjectorData() {
+      document.getElementById("bulkPasteArea").value = "";
+      localStorage.removeItem("ieb_t6_battle_records");
+      renderProjectorStats([]);
+    }
+
+    function renderProjectorStats(records) {
+      const netflixRecs = records.filter(r => r.faction === "NETFLIX");
+      const toyotaRecs = records.filter(r => r.faction === "TOYOTA");
+
+      const nCount = netflixRecs.length;
+      const tCount = toyotaRecs.length;
+
+      const nAvg = nCount > 0 ? (netflixRecs.reduce((acc, r) => acc + r.grade, 0) / nCount) * 10 : 0;
+      const tAvg = tCount > 0 ? (toyotaRecs.reduce((acc, r) => acc + r.grade, 0) / tCount) * 10 : 0;
+
+      document.getElementById("projNetflixCount").textContent = `${nCount} alumno${nCount === 1 ? "" : "s"}`;
+      document.getElementById("projToyotaCount").textContent = `${tCount} alumno${tCount === 1 ? "" : "s"}`;
+      document.getElementById("projNetflixAvg").textContent = `${nAvg.toFixed(1)}%`;
+      document.getElementById("projToyotaAvg").textContent = `${tAvg.toFixed(1)}%`;
+
+      let alphaShare = 50;
+      if (nAvg + tAvg > 0) {
+        alphaShare = Math.round((nAvg / (nAvg + tAvg)) * 100);
+      }
+      const omegaShare = 100 - alphaShare;
+
+      document.getElementById("projAlphaShare").textContent = `${alphaShare}%`;
+      document.getElementById("projOmegaShare").textContent = `${omegaShare}%`;
+      document.getElementById("projTugBar").style.width = `${alphaShare}%`;
+
+      const winnerBanner = document.getElementById("projWinnerBanner");
+      if (nCount === 0 && tCount === 0) {
+        winnerBanner.textContent = "ESPERANDO DATOS DE COMBATE";
+        winnerBanner.className = "text-amber-400";
+      } else if (nAvg > tAvg) {
+        winnerBanner.textContent = "🏆 VENTAJA PARA FACCIÓN ALPHA (NETFLIX)";
+        winnerBanner.className = "text-rose-400 animate-pulse";
+      } else if (tAvg > nAvg) {
+        winnerBanner.textContent = "🏆 VENTAJA PARA FACCIÓN OMEGA (TOYOTA)";
+        winnerBanner.className = "text-indigo-400 animate-pulse";
+      } else {
+        winnerBanner.textContent = "⚡ EMPATE TÉCNICO EN LA ARENA";
+        winnerBanner.className = "text-amber-400";
+      }
+    }
+  </script>
+</body>
+</html>
