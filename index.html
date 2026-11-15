@@ -143,7 +143,7 @@
         </div>
 
         <div class="mt-4 bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 text-xs text-slate-700 leading-relaxed">
-          <strong class="text-slate-900">Dinámica de Competición en Directo:</strong> El aula se divide en dos facciones rivales. Selecciona el bando asignado por el profesor. Deberás superar <strong>5 asaltos operativos</strong> (cada uno compuesto por un reto interactivo y un dilema teórico). Tu calificación (0 a 10) y el impacto de tu facción en el combate se calculan <strong>estrictamente sobre tus primeros intentos</strong>.
+          <strong class="text-slate-900">Dinámica de Competición en Directo:</strong> El aula se divide en dos facciones rivales. Selecciona el bando asignado por el profesor. Superarás <strong>5 asaltos operativos</strong>: cada vez que completes un asalto, tus puntos sumarán <strong>en tiempo real</strong> al marcador proyectado en clase.
         </div>
       </div>
 
@@ -271,14 +271,14 @@
             </button>
           </div>
           <div id="sessionIdBox" class="font-mono-code text-xs sm:text-sm text-emerald-400 break-all select-all"></div>
-          <p class="text-[11px] text-slate-400">Registra tu resultado oficial en Google Sheets y descarga tu justificante CSV antes de cerrar.</p>
+          <p class="text-[11px] text-slate-400">Tus puntos ya se han ido transmitiendo asalto a asalto. Confirma el acta final y descarga tu justificante CSV.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-          <button type="button" id="btnSubmitSheets" onclick="submitToGoogleSheets()"
+          <button type="button" id="btnSubmitSheets" onclick="submitFinalToGoogleSheets()"
             class="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-extrabold text-sm shadow-sm transition flex items-center justify-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-            <span id="btnSubmitText">Enviar Acta a Google Sheets</span>
+            <span id="btnSubmitText">Confirmar Acta Final en Sheets</span>
           </button>
 
           <button type="button" onclick="downloadCSV()"
@@ -299,7 +299,7 @@
 
   </main>
 
-  <!-- MODAL PROYECTOR DE AULA: SINCRONIZACIÓN AUTOMÁTICA EN TIEMPO REAL (POLLING 5s) -->
+  <!-- MODAL PROYECTOR DE AULA: SINCRONIZACIÓN AUTOMÁTICA EN TIEMPO REAL DESDE ASALTO 1 -->
   <div id="projectorModal" class="hidden fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-slate-900 border border-slate-700 text-white rounded-3xl max-w-4xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-auto">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
@@ -308,7 +308,7 @@
             <span class="text-xs font-bold uppercase tracking-widest text-amber-400">IEB · Marcador Oficial en Tiempo Real</span>
             <span id="liveSyncBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-emerald-950 text-emerald-300 border border-emerald-700/70">
               <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              LIVE SYNC (5s)
+              LIVE SYNC · ASALTO A ASALTO
             </span>
           </div>
           <h2 class="text-xl sm:text-2xl font-black tracking-tight mt-1">COMBATE CULTURAL: NETFLIX VS. TOYOTA</h2>
@@ -324,6 +324,7 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-11 gap-4 items-center">
+        <!-- Facción Alpha: Netflix -->
         <div class="md:col-span-5 bg-gradient-to-br from-rose-950/90 to-slate-900 border-2 border-rose-500/60 rounded-2xl p-5 glow-netflix">
           <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-black uppercase tracking-wider text-rose-400">Facción Alpha</span>
@@ -332,17 +333,19 @@
           <h3 class="text-2xl sm:text-3xl font-black text-white">NETFLIX</h3>
           <p class="text-xs text-rose-200/80 mt-1">Libertad, Densidad de Talento y Franqueza Radical</p>
           <div class="mt-4 pt-3 border-t border-rose-800/50 flex items-baseline justify-between">
-            <span class="text-xs text-rose-300">Precisión Media 1er Intento:</span>
+            <span class="text-xs text-rose-300">Tasa de Acierto en Directo:</span>
             <span id="projNetflixAvg" class="text-3xl sm:text-4xl font-black font-mono-code text-rose-400">0.0%</span>
           </div>
         </div>
 
+        <!-- Centro VS -->
         <div class="md:col-span-1 flex justify-center">
           <div class="w-14 h-14 rounded-2xl bg-amber-400 text-slate-950 font-black text-lg flex items-center justify-center shadow-lg clash-badge">
             VS
           </div>
         </div>
 
+        <!-- Facción Omega: Toyota -->
         <div class="md:col-span-5 bg-gradient-to-bl from-indigo-950/90 to-slate-900 border-2 border-indigo-500/60 rounded-2xl p-5 glow-toyota">
           <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-black uppercase tracking-wider text-indigo-400">Facción Omega</span>
@@ -351,7 +354,7 @@
           <h3 class="text-2xl sm:text-3xl font-black text-white">TOYOTA</h3>
           <p class="text-xs text-indigo-200/80 mt-1">Teoría Z, Consenso Nemawashi y Estabilidad</p>
           <div class="mt-4 pt-3 border-t border-indigo-800/50 flex items-baseline justify-between">
-            <span class="text-xs text-indigo-300">Precisión Media 1er Intento:</span>
+            <span class="text-xs text-indigo-300">Tasa de Acierto en Directo:</span>
             <span id="projToyotaAvg" class="text-3xl sm:text-4xl font-black font-mono-code text-indigo-400">0.0%</span>
           </div>
         </div>
@@ -360,7 +363,7 @@
       <div class="space-y-2.5 bg-slate-950/60 p-4 rounded-2xl border border-slate-800">
         <div class="flex justify-between text-xs sm:text-sm font-extrabold uppercase tracking-wider">
           <span class="text-rose-400">Dominio Netflix: <span id="projAlphaShare">50%</span></span>
-          <span id="projWinnerBanner" class="text-amber-400 text-center">CONECTANDO CON GOOGLE SHEETS...</span>
+          <span id="projWinnerBanner" class="text-amber-400 text-center">ESPERANDO PRIMEROS COMBATIENTES...</span>
           <span class="text-indigo-400">Dominio Toyota: <span id="projOmegaShare">50%</span></span>
         </div>
         <div class="relative h-7 w-full bg-indigo-600 rounded-full overflow-hidden border-2 border-slate-700 shadow-inner">
@@ -1265,7 +1268,57 @@
       }
     }
 
+    // =========================================================================
+    // ENVÍO PROGRESIVO EN TIEMPO REAL AL COMPLETAR CADA ASALTO (1..5)
+    // =========================================================================
+    function buildPayloadParams(estadoTexto) {
+      const { hits, grade } = calculateFinalScore();
+      const params = new URLSearchParams();
+      state.elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);
+
+      params.append("tema", "Tema 6 - Cultura Organizacional (Netflix vs Toyota)");
+      params.append("sessionId", state.sessionId);
+      params.append("fecha", new Date().toISOString());
+      params.append("nombre", state.nombre);
+      params.append("apellidos", state.apellidos);
+      params.append("grupo", state.grupo);
+      params.append("email", state.email);
+      params.append("faccion", state.faction);
+      params.append("tiempoSegundos", String(state.elapsedSeconds));
+      params.append("tiempoFormateado", formatTime(state.elapsedSeconds));
+      params.append("fallosPrimerIntento", String(state.totalErrors));
+      params.append("aciertosPrimerIntento", String(hits));
+      params.append("poderCombate", String(state.powerPoints));
+      params.append("estado", estadoTexto);
+
+      const gradeStr = grade.toFixed(2);
+      params.append("nota", gradeStr);
+      params.append("notaFinal", gradeStr);
+      params.append("score", gradeStr);
+      params.append("calificacion", gradeStr);
+      params.append("grade", gradeStr);
+
+      state.firstAttemptResults.forEach((val, idx) => {
+        params.append(`q${idx + 1}`, val ? "1" : "0");
+      });
+
+      return params;
+    }
+
+    function syncProgressSilently(roundCompletedNumber) {
+      const params = buildPayloadParams(`ASALTO_${roundCompletedNumber}_DE_5`);
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+        body: params.toString()
+      }).catch(() => {});
+    }
+
     function advanceRound() {
+      // Enviar pulso en tiempo real al completar cada asalto (desde el Asalto 1)
+      syncProgressSilently(state.currentRound + 1);
+
       if (state.currentRound < 4) {
         renderRound(state.currentRound + 1);
       } else {
@@ -1321,6 +1374,9 @@
         `;
         auditList.appendChild(row);
       });
+
+      // Enviar cierre final automáticamente
+      submitFinalToGoogleSheets();
     }
 
     function copyBattleToken() {
@@ -1330,7 +1386,7 @@
       });
     }
 
-    function submitToGoogleSheets() {
+    function submitFinalToGoogleSheets() {
       if (state.isSubmitting || state.submitted) return;
       state.isSubmitting = true;
 
@@ -1340,35 +1396,9 @@
 
       btn.disabled = true;
       btn.style.pointerEvents = "none";
-      btnText.textContent = "Transmitiendo Acta...";
+      btnText.textContent = "Cerrando Acta Final...";
 
-      const { hits, grade } = calculateFinalScore();
-      const params = new URLSearchParams();
-
-      params.append("tema", "Tema 6 - Cultura Organizacional (Netflix vs Toyota)");
-      params.append("sessionId", state.sessionId);
-      params.append("fecha", new Date().toISOString());
-      params.append("nombre", state.nombre);
-      params.append("apellidos", state.apellidos);
-      params.append("grupo", state.grupo);
-      params.append("email", state.email);
-      params.append("faccion", state.faction);
-      params.append("tiempoSegundos", String(state.elapsedSeconds));
-      params.append("tiempoFormateado", formatTime(state.elapsedSeconds));
-      params.append("fallosPrimerIntento", String(state.totalErrors));
-      params.append("aciertosPrimerIntento", String(hits));
-      params.append("poderCombate", String(state.powerPoints));
-
-      const gradeStr = grade.toFixed(2);
-      params.append("nota", gradeStr);
-      params.append("notaFinal", gradeStr);
-      params.append("score", gradeStr);
-      params.append("calificacion", gradeStr);
-      params.append("grade", gradeStr);
-
-      state.firstAttemptResults.forEach((val, idx) => {
-        params.append(`q${idx + 1}`, val ? "1" : "0");
-      });
+      const params = buildPayloadParams("FINALIZADO");
 
       fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
@@ -1381,10 +1411,10 @@
       .then(() => {
         state.submitted = true;
         state.isSubmitting = false;
-        btnText.textContent = "Acta Registrada en Google Sheets ✓";
+        btnText.textContent = "Acta Final Confirmada ✓";
         btn.classList.remove("bg-emerald-600", "hover:bg-emerald-700");
         btn.classList.add("bg-slate-800");
-        statusMsg.textContent = "Envío completado sin duplicados. Descarga también tu justificante CSV como respaldo local.";
+        statusMsg.textContent = "Tu progreso en vivo y acta final están registrados en Google Sheets. Descarga tu justificante CSV como respaldo.";
         statusMsg.className = "p-3 rounded-xl text-xs font-bold bg-emerald-50 border border-emerald-200 text-emerald-800";
         statusMsg.classList.remove("hidden");
       })
@@ -1392,8 +1422,8 @@
         state.isSubmitting = false;
         btn.disabled = false;
         btn.style.pointerEvents = "auto";
-        btnText.textContent = "Reintentar Envío a Google Sheets";
-        statusMsg.textContent = "Error de conexión al enviar. Por favor, reintenta o descarga el justificante CSV.";
+        btnText.textContent = "Reintentar Confirmación Final";
+        statusMsg.textContent = "Error de red al confirmar el cierre. Reintenta o descarga el justificante CSV.";
         statusMsg.className = "p-3 rounded-xl text-xs font-bold bg-red-50 border border-red-200 text-red-700";
         statusMsg.classList.remove("hidden");
       });
@@ -1435,6 +1465,9 @@
       URL.revokeObjectURL(url);
     }
 
+    // =========================================================================
+    // MODO PROYECTOR LIVE: CÁLCULO PROPORCIONAL SOBRE PREGUNTAS YA JUGADAS
+    // =========================================================================
     function toggleProjectorModal() {
       const modal = document.getElementById("projectorModal");
       modal.classList.toggle("hidden");
@@ -1476,7 +1509,7 @@
 
           renderProjectorStats(records);
           const nowStr = new Date().toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-          infoLabel.textContent = `Sincronizado en vivo (${nowStr}) · ${records.length} actas recibidas`;
+          infoLabel.textContent = `Sincronizado en vivo (${nowStr}) · ${records.length} combatientes activos`;
           syncBadge.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-emerald-950 text-emerald-300 border border-emerald-700/70";
         }
       } catch (err) {
@@ -1491,12 +1524,10 @@
         state.livePollInterval = null;
       }
       const demo = [
-        { faction: "NETFLIX", grade: 8.0 },
-        { faction: "NETFLIX", grade: 9.0 },
-        { faction: "NETFLIX", grade: 7.0 },
-        { faction: "TOYOTA", grade: 9.0 },
-        { faction: "TOYOTA", grade: 10.0 },
-        { faction: "TOYOTA", grade: 8.0 }
+        { faction: "NETFLIX", hits: 2, answered: 2 },
+        { faction: "NETFLIX", hits: 3, answered: 4 },
+        { faction: "TOYOTA", hits: 2, answered: 2 },
+        { faction: "TOYOTA", hits: 4, answered: 4 }
       ];
       renderProjectorStats(demo);
       document.getElementById("lastSyncInfo").textContent = "Modo demostración activo (polling pausado)";
@@ -1509,8 +1540,16 @@
       const nCount = netflixRecs.length;
       const tCount = toyotaRecs.length;
 
-      const nAvg = nCount > 0 ? (netflixRecs.reduce((acc, r) => acc + Number(r.grade || r.nota || 0), 0) / nCount) * 10 : 0;
-      const tAvg = tCount > 0 ? (toyotaRecs.reduce((acc, r) => acc + Number(r.grade || r.nota || 0), 0) / tCount) * 10 : 0;
+      // Precisión proporcional sobre preguntas ya respondidas (ej. 2/2 en Asalto 1 = 100%)
+      const calcAccuracy = (arr) => {
+        if (arr.length === 0) return 0;
+        const totalHits = arr.reduce((acc, r) => acc + Number(r.hits !== undefined ? r.hits : (r.grade || 0)), 0);
+        const totalAnswered = arr.reduce((acc, r) => acc + Number(r.answered || 10), 0);
+        return totalAnswered > 0 ? (totalHits / totalAnswered) * 100 : 0;
+      };
+
+      const nAvg = calcAccuracy(netflixRecs);
+      const tAvg = calcAccuracy(toyotaRecs);
 
       document.getElementById("projNetflixCount").textContent = `${nCount} combatiente${nCount === 1 ? "" : "s"}`;
       document.getElementById("projToyotaCount").textContent = `${tCount} combatiente${tCount === 1 ? "" : "s"}`;
@@ -1529,13 +1568,13 @@
 
       const winnerBanner = document.getElementById("projWinnerBanner");
       if (nCount === 0 && tCount === 0) {
-        winnerBanner.textContent = "ESPERANDO ACTAS EN DIRECTO...";
+        winnerBanner.textContent = "ESPERANDO PRIMEROS COMBATIENTES...";
         winnerBanner.className = "text-amber-400 text-center";
       } else if (nAvg > tAvg) {
-        winnerBanner.textContent = "🏆 VENTAJA PARA FACCIÓN ALPHA (NETFLIX)";
+        winnerBanner.textContent = "🏆 VENTAJA EN DIRECTO: FACCIÓN ALPHA (NETFLIX)";
         winnerBanner.className = "text-rose-400 animate-pulse text-center";
       } else if (tAvg > nAvg) {
-        winnerBanner.textContent = "🏆 VENTAJA PARA FACCIÓN OMEGA (TOYOTA)";
+        winnerBanner.textContent = "🏆 VENTAJA EN DIRECTO: FACCIÓN OMEGA (TOYOTA)";
         winnerBanner.className = "text-indigo-400 animate-pulse text-center";
       } else {
         winnerBanner.textContent = "⚡ EMPATE TÉCNICO EN LA ARENA";
